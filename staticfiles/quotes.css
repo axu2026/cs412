@@ -14,17 +14,17 @@ img {
     height: auto;
 }
 
-a {
-    padding-left: 25px;
-    padding-right: 25px;
-}
-
 .main-content {
     margin-top: 20px;
     margin-bottom: 20px;
     margin-left: 100px;
     margin-right: 100px;
     flex: 1;
+}
+
+nav > a {
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .footer {
