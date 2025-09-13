@@ -1,0 +1,31 @@
+<!--base.html-->
+<!--Aidan Xu (axu26@bu.edu), 9/9/25-->
+<!--The base html file for the quotes app, including the header, navigation,
+    and footer, with the body provided by other html files.-->
+
+{% load static %}
+<html>
+    <head>
+        <title> David Byrne Quote of the Day </title>
+        <link rel="stylesheet" href="{% static 'quotes.css' %}">
+    </head>
+    <body>
+        <h1>David Byrne Quote of the Day</h1>
+        <nav>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'quote' %}">Quote of the Day</a>
+            <a href="{% url 'show_all' %}">Show All</a>
+        </nav>
+        <div class="main-content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="container">
+            <div class="footer">
+                Created by Aidan Xu (axu26@bu.edu)
+                <br>
+                Last loaded on: {{time}}
+            </div>
+        </div>
+    </body>
+</html>

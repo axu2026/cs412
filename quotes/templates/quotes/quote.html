@@ -1,0 +1,12 @@
+<!--quote.html-->
+<!--Aidan Xu (axu26@bu.edu), 9/9/25-->
+<!--The quote html for the quotes app, creating a page with a random image 
+    and quote from a notable individual.-->
+
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+    <h2>Quote of the Day</h2>
+    <p>"{{quote}}"</p>
+    <img src="{{image}}" alt="Photo of David Byrne">
+{% endblock %}

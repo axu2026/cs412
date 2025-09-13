@@ -1,0 +1,18 @@
+<!--show_all.html-->
+<!--Aidan Xu (axu26@bu.edu), 9/9/25-->
+<!--The show_all html file for the quotes app, showing all images and quotes
+    of the notable figure that could show up on the quote page.-->
+
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+    <h2>All quotes from David Byrne</h2>
+    {% for line in quotes %}
+        <p>"{{line}}"</p>
+    {% endfor %}
+
+    <h2>All images of David Byrne</h2>
+    {% for image in images %}
+        <img src="{{image}}" alt="Photo of David Byrne">
+    {% endfor %}
+{% endblock %}
