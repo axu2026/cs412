@@ -1,0 +1,35 @@
+<!--restaurant/base.html-->
+<!--Aidan Xu (axu26@bu.edu), 9/16/25-->
+<!--The base html file for the restaurant app, including the header, navigation,
+    and footer, with the body provided by other html files.-->
+
+{% load static %}
+<html>
+    <head>
+        <title>China Sea Restaurant</title>
+        <link rel="stylesheet" href="{% static 'restaurant.css' %}">
+    </head>
+    <body>
+        <!--navigation menu, title, and info-->
+        <div class="header">
+            <h1>China Sea Restaurant</h1>
+            <p>5 Main Rd, Tiverton, RI 02878</p>
+            <nav>
+                <a href="{% url 'main' %}">Home Page</a>
+                <a href="{% url 'order' %}">Order</a>
+            </nav>
+        </div>
+
+        <!--main content-->
+        {% block content %}
+        {% endblock %}
+
+        <!--footer-->
+        <div class="footer">
+            <br>
+            Created by Aidan Xu (axu26@bu.edu)
+            <br>
+            Last loaded on: {{time}}
+        </div>
+    </body>
+</html>

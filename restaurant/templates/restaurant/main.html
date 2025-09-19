@@ -1,0 +1,47 @@
+<!--restaurant/main.html-->
+<!--Aidan Xu (axu26@bu.edu), 9/16/25-->
+<!--The main html file for the restaurant app, acting as the default page when
+    opening the restaurant app.-->
+
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+    <div class="home">
+        <h2>Welcome</h2>
+        <p>We do takeout and delivery!</p>
+        <img src="https://s3-media0.fl.yelpcdn.com/bphoto/BqbPGt1Pt1tk_XlZ2qaWRA/l.jpg" alt="China Sea">
+        <br>
+        <!--table displaying work hours-->
+        <table>
+            <h3>Hours</h3>
+            <tr>
+                <td>Monday</td>
+                <td>Closed</td>
+            </tr>
+            <tr>
+                <td>Tuesday</td>
+                <td>11 AM to 10 PM</td>
+            </tr>
+            <tr>
+                <td>Wednesday</td>
+                <td>11 AM to 10 PM</td>
+            </tr>
+            <tr>
+                <td>Thursday</td>
+                <td>11 AM to 10 PM</td>
+            </tr>
+            <tr>
+                <td>Friday</td>
+                <td>11 AM to 10:30 PM</td>
+            </tr>
+            <tr>
+                <td>Saturday</td>
+                <td>11 AM to 10:30 PM</td>
+            </tr>
+            <tr>
+                <td>Sunday</td>
+                <td>11:30 AM to 10 PM</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

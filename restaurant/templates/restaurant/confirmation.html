@@ -1,0 +1,56 @@
+<!--restaurant/confirmation.html-->
+<!--Aidan Xu (axu26@bu.edu), 9/16/25-->
+<!--The confirmation html file for the restaurant app, shown after the order
+    page is submitted. Shows relevant information of the order placed.-->
+
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+    <div class="confirmation">
+        <h2>Order Confirmation</h2>
+        <div>
+            <h3>Thank you for your order!</h3>
+            <p>Your order will be ready at {{ready_time}}</p>
+        </div>
+        <!--print all items out, with prices and totals-->
+        <div class="order_prices">
+            <!--loop through all items-->
+            <table>
+                {% for item in items %}
+                    <tr>
+                        <td>{{item}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <div>
+                Special Instructions:
+                <p>{{special_instructions}}</p>
+            </div>
+            <!--i like tables they look nice :)-->
+            <table>
+                <tr>
+                    <td>Subtotal:</td>
+                    <td>${{price}}</td>
+                </tr>
+                <tr>
+                    <td>Tax:</td>
+                    <td>${{tax}}</td>
+                </tr>
+                <tr>
+                    <td>Total:</td>
+                    <td>${{total}}</td>
+                </tr>
+            </table>
+        </div>
+        <!--customer info-->
+        <div>
+            <h3>Customer Information</h3>
+            {{name}}
+            <br>
+            {{phone}}
+            <br>
+            {{email}}
+        </div>
+    </div>
+{% endblock %}

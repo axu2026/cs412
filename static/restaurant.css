@@ -1,0 +1,38 @@
+body {
+    font-family: Tahoma, sans-serif;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.footer {
+    padding: 10px;
+    color: grey;
+    margin-top: auto;
+}
+
+.home > img {
+    width: 50%;
+}
+
+.home > table {
+    margin: auto;
+}
+
+.order > form {
+    width: 50%;
+    text-align: left;
+    margin: 0 auto;
+}
+
+.order_prices > table {
+    margin: auto;
+}
+
+nav > a {
+    margin-left: 20px;
+    margin-right: 20px;
+}
