@@ -5,22 +5,19 @@
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
-    <div class="all_profiles">
-        <table>
+    <!--produces a grid of all the profiles-->
+    <div class="container">
         <!--go through all the profiles and display their information-->
         {% for profile in profiles %}
-            <tr>
-                <td>
-                    <h3>{{profile.display_name}}</h3>
-                    @{{profile.username}}
-                    <br>
-                    <!--using a container here to make image circular and fit circle-->
-                    <div class="img_container">
-                        <img src="{{profile.profile_image_url}}" alt="profile picture">
-                    </div>
-                </td>
-            </tr>
+            <div class="square">
+                <h3>{{profile.display_name}}</h3>
+                @{{profile.username}}
+                <br>
+                <!--using a container here to make image circular and fit circle-->
+                <div class="img_container">
+                    <img src="{{profile.profile_image_url}}" alt="profile picture">
+                </div>
+            </div>
         {% endfor %}
-        </table>
     </div>
 {% endblock %}
