@@ -1,0 +1,17 @@
+<!--mini_insta/base.html-->
+<!--Aidan Xu (axu26@bu.edu), 9/24/25-->
+<!--The base html file for the mini_insta app with header
+    and footer, and the body provided by other html files.-->
+
+{% load static %}
+
+<html>
+    <head>
+        <title>Mini Insta</title>
+        <link rel="stylesheet" href="{% static 'mini_insta.css' %}">
+    </head>
+    <body>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
