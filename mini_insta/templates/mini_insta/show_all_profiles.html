@@ -11,12 +11,14 @@
         {% for profile in profiles %}
             <div class="square">
                 <h3>{{profile.display_name}}</h3>
-                @{{profile.username}}
+                <span>@{{profile.username}}</span>
                 <br>
                 <!--using a container here to make image circular and fit circle-->
-                <div class="img_container">
-                    <img src="{{profile.profile_image_url}}" alt="profile picture">
-                </div>
+                <a href="{% url 'show_profile' profile.pk %}">
+                    <div class="img_container">
+                        <img src="{{profile.profile_image_url}}" alt="profile picture">
+                    </div>
+                </a>
             </div>
         {% endfor %}
     </div>

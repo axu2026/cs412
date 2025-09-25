@@ -13,11 +13,11 @@ class ProfileListView(ListView):
 
     model = Profile
     template_name = "mini_insta/show_all_profiles.html"
-    context_object_name = "profiles"
+    context_object_name = "profiles" # all profiles
 
 class ProfileDetailView(DetailView):
     """A view class to show more details of a single profile"""
 
     model = Profile
     template_name = "mini_insta/show_profile.html"
-    context_object_name = "profile"
+    context_object_name = "profile" # single profile

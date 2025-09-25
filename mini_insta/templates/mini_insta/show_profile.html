@@ -7,9 +7,11 @@
 {% block content %}
 <!--two part div for photo and info-->
     <div class="display_single">
+    <!--image part of the dic-->
         <div class="img_container_single">
             <img src="{{profile.profile_image_url}}" alt="profile picture">
         </div>
+    <!--info part of the div-->
         <div class="info">
             <div>
                 <h1>{{profile.display_name}}</h1> 
@@ -25,12 +27,14 @@
                     <td><strong>Following:</strong></td>
                 </tr>
                 <tr>
+                    <!--placeholder values-->
                     <td>N/A</td>
                     <td>N/A</td>
                     <td>N/A</td>
                 </tr>
             </table>
             <br>
+        <!--bio part-->
             <p>{{profile.bio_text}}</p>
         </div>
     </div>
