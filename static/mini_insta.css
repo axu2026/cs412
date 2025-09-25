@@ -1,26 +1,53 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
-    margin: 0;
     padding: 0;
+    margin: 0;
 }
 
-nav {
-    display: flex;
-    justify-content: space-between;
-    padding: 1em 2em;
+
+/*header css*/
+header {
+    font-family: 'Segoe UI', sans-serif;
+    position: fixed;
     background-color: #62d7bc;
+    width: 100%;
+    z-index: 100;
+    text-align: center;
+}
+
+header a {
+    text-decoration: none;
     color: white;
 }
 
+header a h1 {
+    margin: 12px;
+}
+
+
+/*footer css stuff*/
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background-color: #e9e9e9;
+    width: 100%;
+    z-index: 100;
+}
+
+
+/*show_all_profiles css stuff*/
 .container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     padding: 2em;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    gap: 10px;
 }
 
 .container .square {
     text-align: center;
-    padding: 1em;
 }
 
 .container .square h3 {
@@ -34,6 +61,7 @@ nav {
     border-radius: 50%;
     margin-left: auto;
     margin-right: auto;
+    border: 2px solid #62d7bc;
 }
 
 .img_container img {
@@ -45,5 +73,49 @@ nav {
 }
 
 .img_container img:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
+}
+
+
+/*show_profile css stuff*/
+.display_single {
+    padding: 2em;
+    padding-top: 96px;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+}
+
+.img_container_single {
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 3px solid #62d7bc;
+}
+
+.img_container_single img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-fit: cover;
+}
+
+.info > div > h1 {
+    display: inline-block;
+    margin-right: 12px;
+    margin-bottom: 0px;
+}
+
+.info > div > h3 {
+    display: inline-block;
+    color: gray;
+    margin-bottom: 0px;
+}
+
+.info > table {
+    border-spacing: 10px;
+}
+
+.posts {
+    padding: 2em;
 }

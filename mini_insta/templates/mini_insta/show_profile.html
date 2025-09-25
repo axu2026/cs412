@@ -5,4 +5,38 @@
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
+<!--two part div for photo and info-->
+    <div class="display_single">
+        <div class="img_container_single">
+            <img src="{{profile.profile_image_url}}" alt="profile picture">
+        </div>
+        <div class="info">
+            <div>
+                <h1>{{profile.display_name}}</h1> 
+                <h3>@{{profile.username}}</h3>
+            </div>
+            <p>Joined {{profile.join_date}}</p>
+            <br>
+        <!--table for followers and stats. there are placeholders for now-->
+            <table>
+                <tr>
+                    <td><strong>Posts:</strong></td>
+                    <td><strong>Followers:</strong></td>
+                    <td><strong>Following:</strong></td>
+                </tr>
+                <tr>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                </tr>
+            </table>
+            <br>
+            <p>{{profile.bio_text}}</p>
+        </div>
+    </div>
+<!--for posts, going to be used later i assume-->
+    <div class="posts">
+        <h1>Posts</h1>
+        N/A
+    </div>
 {% endblock %}

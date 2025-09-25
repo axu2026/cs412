@@ -11,10 +11,16 @@
         <link rel="stylesheet" href="{% static 'mini_insta.css' %}">
     </head>
     <body>
-        <nav>
-            MiniInsta
-        </nav>
+    <!--header-->
+        <header>
+            <a href="{% url 'show_all_profiles' %}"><h1>mini insta™</h1></a>
+        </header>
+    <!--main content-->
         {% block content %}
         {% endblock %}
+    <!--footer-->
+        <footer>
+            test
+        </footer>
     </body>
 </html>
