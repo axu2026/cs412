@@ -3,44 +3,52 @@
 <!--The page that will show a single profile with detail.-->
 
 {% extends 'mini_insta/base.html' %}
+{% load static %}
 
 {% block content %}
 <!--two part div for photo and info-->
     <div class="display_single">
-    <!--image part of the dic-->
-        <div class="img_container_single">
-            <img src="{{profile.profile_image_url}}" alt="profile picture">
-        </div>
-    <!--info part of the div-->
-        <div class="info">
-            <div>
-                <h1>{{profile.display_name}}</h1> 
-                <h3>@{{profile.username}}</h3>
+        <div class="profile_single">
+        <!--image part of the div-->
+            <div class="img_container_single">
+                <img src="{{profile.profile_image_url}}" alt="profile picture">
             </div>
-            <p>Joined {{profile.join_date}}</p>
-            <br>
-        <!--table for followers and stats. there are placeholders for now-->
-            <table>
-                <tr>
-                    <td><strong>Posts:</strong></td>
-                    <td><strong>Followers:</strong></td>
-                    <td><strong>Following:</strong></td>
-                </tr>
-                <tr>
-                    <!--placeholder values-->
-                    <td>N/A</td>
-                    <td>N/A</td>
-                    <td>N/A</td>
-                </tr>
-            </table>
-            <br>
-        <!--bio part-->
-            <p>{{profile.bio_text}}</p>
+        <!--info part of the div-->
+            <div class="info">
+                <div>
+                    <h1>{{profile.display_name}}</h1> 
+                    <h3>@{{profile.username}}</h3>
+                </div>
+                <p>Joined {{profile.join_date}}</p>
+            <!--bio part-->
+                <p>{{profile.bio_text}}</p>
+            <!--table for followers and stats. there are placeholders for now-->
+                <table>
+                    <tr>
+                        <td><strong>Posts:</strong></td>
+                        <td><strong>Followers:</strong></td>
+                        <td><strong>Following:</strong></td>
+                    </tr>
+                    <tr>
+                        <td>{{profile.get_posts_count}}</td>
+                        <!--placeholder values-->
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    </tr>
+                </table>
+            </div>
         </div>
-    </div>
-<!--for posts, going to be used later i assume-->
-    <div class="posts">
-        <h1>Posts</h1>
-        N/A
+    <!--for posts-->
+        <div class="show_posts">
+            <h1>Posts</h1>
+            <div class="posts_grid">
+            <!--go through all the profile's posts and display them-->
+                {% for post in profile.get_all_posts %}
+                    <a href="{% url 'show_post' post.pk%}">
+                        <img src={{post.get_first_photo}} alt="image">
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock %}
