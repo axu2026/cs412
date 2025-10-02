@@ -37,18 +37,20 @@ footer {
     bottom: 0;
     background-color: #4f4f4f;
     width: 100%;
+    height: 40px;
     z-index: 100;
+    text-align: center;
 }
 
 footer > a > img {
-    width: 4%;
-    height: 4%;
+    width: 32px;
+    height: 32px;
     padding: 4px;
 }
 
 
 /*show_all_profiles css stuff*/
-.container {
+.all_profiles {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     padding: 2em;
@@ -57,19 +59,24 @@ footer > a > img {
     gap: 10px;
 }
 
-.container .square {
+.all_profiles .square {
     text-align: center;
 }
 
-.container .square h3 {
+.all_profiles .square .name {
     margin: auto;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-.container .square span {
+.all_profiles .square p {
+    margin: 0;
     color:grey;
 }
 
-.img_container {
+.all_profiles .square .img {
+    display: inline-block;
     width: 200px;
     height: 200px;
     overflow: hidden;
@@ -79,7 +86,7 @@ footer > a > img {
     border: 2px solid #62d7bc;
 }
 
-.img_container img {
+.all_profiles .square a img {
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -87,17 +94,17 @@ footer > a > img {
     transition: transform 0.2s;
 }
 
-.img_container img:hover {
+.all_profiles .square a img:hover {
     transform: scale(1.1);
 }
 
 /*show_profile css stuff*/
-.display_single {
+.single_profile {
     display: grid;
     grid-template-columns: 320px 1fr;
 }
 
-.profile_single {
+.side_info {
     background-color: #ececec;
 }
 
@@ -143,6 +150,7 @@ footer > a > img {
 .show_posts {
     padding: 2em;
     padding-top: 4em;
+    padding-bottom: 3em;
 }
 
 .post {
@@ -156,6 +164,7 @@ footer > a > img {
 }
 
 .posts_grid a {
+    margin-bottom: 0.75em;
     width: 240px;
     height: 300px;
     overflow: hidden;
@@ -170,4 +179,91 @@ footer > a > img {
     object-fit: contain;
     object-fit: cover;
     transition: transform 0.2s;
+}
+
+.posts_grid a img:hover {
+    transform: scale(1.1);
+}
+
+/*for single post*/
+.single_post {
+    padding: 1em;
+    padding-top: 5em;
+    padding-bottom: 5em;
+}
+
+.post_caption {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+}
+
+.post_caption .pfp a {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post_caption .pfp a img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-fit: cover;
+    transition: transform 0.2s;
+}
+
+.post_caption .pfp a img:hover {
+    transform: scale(1.1);
+}
+
+.caption {
+    margin-left: 1em;
+}
+
+.post_caption .caption a {
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    margin: 0;
+}
+
+.caption span {
+    display: inline-block;
+    color: grey;
+}
+
+.caption img {
+    border-radius: 5px;
+    max-width: 640px;
+    height: auto;
+}
+
+/*css for making posts*/
+.make_post {
+    padding: 1em;
+    padding-top: 4em;
+}
+
+.make_post label {
+    display: block;
+    font-weight: bold;
+}
+
+.make_post .button {
+    width: 100px;
+    height: 50px;
+    font-size: 24;
+    border-radius: 5px;
+    color: white;
+    background-color: #62d7bc;
+    border: none;
+    transition: 0.2s;
+}
+
+.make_post .button:hover {
+    background-color: #4f4f4f;
 }
