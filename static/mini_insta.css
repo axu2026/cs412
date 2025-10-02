@@ -37,12 +37,14 @@ footer {
     bottom: 0;
     background-color: #4f4f4f;
     width: 100%;
+    height: 40px;
     z-index: 100;
+    text-align: center;
 }
 
 footer > a > img {
-    width: 4%;
-    height: 4%;
+    width: 32px;
+    height: 32px;
     padding: 4px;
 }
 
@@ -148,6 +150,7 @@ footer > a > img {
 .show_posts {
     padding: 2em;
     padding-top: 4em;
+    padding-bottom: 3em;
 }
 
 .post {
@@ -237,4 +240,30 @@ footer > a > img {
     border-radius: 5px;
     max-width: 640px;
     height: auto;
+}
+
+/*css for making posts*/
+.make_post {
+    padding: 1em;
+    padding-top: 4em;
+}
+
+.make_post label {
+    display: block;
+    font-weight: bold;
+}
+
+.make_post .button {
+    width: 100px;
+    height: 50px;
+    font-size: 24;
+    border-radius: 5px;
+    color: white;
+    background-color: #62d7bc;
+    border: none;
+    transition: 0.2s;
+}
+
+.make_post .button:hover {
+    background-color: #4f4f4f;
 }

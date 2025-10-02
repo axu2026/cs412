@@ -10,9 +10,10 @@
         <!--go through all the profiles and display their information-->
         {% for profile in profiles %}
             <div class="square">
+            <!--make the display name clickable too-->
                 <a href="{% url 'show_profile' profile.pk %}" class="name">{{profile.display_name}}</a>
                 <p>@{{profile.username}}</p>
-            <!--using a container here to make image circular and fit circle-->
+            <!--makes the picture clickable to take user to profile-->
                 <a href="{% url 'show_profile' profile.pk %}" class="img">
                     <img src="{{profile.profile_image_url}}" alt="profile picture">
                 </a>

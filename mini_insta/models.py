@@ -3,6 +3,7 @@
 # used to define data models for the mini_insta app
 
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class Profile(models.Model):
@@ -35,6 +36,10 @@ class Profile(models.Model):
     def get_posts_count(self):
         """returns the amount of posts attributed to a profile"""
         return Post.objects.filter(profile=self).count()
+    
+    def get_absolute_url(self):
+        """returns the url to an instance of a profile"""
+        return reverse('show_profile', kwargs={'pk':self.pk})
     
 
 class Post(models.Model):
@@ -70,6 +75,10 @@ class Post(models.Model):
         
         # else we return the path to the no image default
         return "../../static/no_image.png"
+    
+    def get_absolute_url(self):
+        """returns the url to an instance of a post"""
+        return reverse('show_post', kwargs={'pk':self.pk})
 
 
 class Photo(models.Model):

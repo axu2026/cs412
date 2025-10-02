@@ -14,6 +14,7 @@
                     <img src="{{post.profile.profile_image_url}}" alt="pfp">
                 </a>
             </div>
+        <!--all the actual content of a post here-->
             <div class="caption">
                 <a href="{% url 'show_profile' post.profile.pk %}">{{post.profile.display_name}}</a>
                 <span>@{{post.profile.username}} on {{post.timestamp}}</span>

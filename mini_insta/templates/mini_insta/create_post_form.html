@@ -1,0 +1,27 @@
+<!--mini_insta/create_post_form.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/1/25-->
+<!--Displays the form to be used when creating a post.-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+    <div class="make_post">
+        <h1>Creating a new post for {{profile}}</h1>
+    <!--the form tag set to post method-->
+        <form method="POST">
+            {% csrf_token %}
+        <!--the actual form that will be used to create the post-->
+            {{form}}
+            <br>
+        <!--this image url will be used to create an image for the post-->
+            <label for="image_url">Image:</label>
+            <input type="url" name="image_url" id="image_url" placeholder="Image URL">
+            <br><br>
+            <input type="submit" value="Submit" class="button">
+        <!--cancel button. it is an a tag disguised as a button-->
+            <a href="{% url 'show_profile' profile.pk %}">
+                <input type="button" value="Cancel" class="button">
+            </a>
+        </form>
+    </div>
+{% endblock %}

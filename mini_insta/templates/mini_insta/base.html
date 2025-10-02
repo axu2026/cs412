@@ -21,6 +21,13 @@
     <!--footer-->
         <footer>
             <a href="{% url 'show_all_profiles' %}"><img src="{% static 'home.webp' %}" alt = "home"></a>
+        <!--check if there is a profile on the page, then allow post creation-->
+            {% if profile %}
+                <a href="{% url 'create_post' profile.pk %}"><img src="{% static 'plus.png' %}" alt = "post"></a>
+        <!--check if there is a post on the page, then make a back to profile button-->
+            {% elif post %}
+                <a href="{% url 'show_profile' post.profile.pk %}"><img src="{% static 'back.webp' %}" alt = "back"></a>
+            {% endif %}
         </footer>
     </body>
 </html>
