@@ -5,5 +5,24 @@
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
-    
+<!--html for a single post-->
+    <div class="single_post">
+    <!--displays profile picture, names, caption, timestamp, and photos-->
+        <div class="post_caption">
+            <div class="pfp">
+                <a href="{% url 'show_profile' post.profile.pk %}">
+                    <img src="{{post.profile.profile_image_url}}" alt="pfp">
+                </a>
+            </div>
+            <div class="caption">
+                <a href="{% url 'show_profile' post.profile.pk %}">{{post.profile.display_name}}</a>
+                <span>@{{post.profile.username}} on {{post.timestamp}}</span>
+                <p>{{post.caption}}</p>
+            <!--displays all images from that post-->
+                {% for photo in post.get_all_photos %}
+                    <img src="{{photo.image_url}}" alt="photo">
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

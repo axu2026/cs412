@@ -6,15 +6,16 @@
 {% load static %}
 
 {% block content %}
-<!--two part div for photo and info-->
-    <div class="display_single">
-        <div class="profile_single">
+<!--the info of a specific profile-->
+    <div class="single_profile">
+        <div class="side_info">
         <!--image part of the div-->
             <div class="img_container_single">
                 <img src="{{profile.profile_image_url}}" alt="profile picture">
             </div>
         <!--info part of the div-->
             <div class="info">
+            <!--profile info-->
                 <div>
                     <h1>{{profile.display_name}}</h1> 
                     <h3>@{{profile.username}}</h3>
@@ -38,7 +39,7 @@
                 </table>
             </div>
         </div>
-    <!--for posts-->
+    <!--actual content-->
         <div class="show_posts">
             <h1>Posts</h1>
             <div class="posts_grid">
