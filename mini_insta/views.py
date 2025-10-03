@@ -52,10 +52,14 @@ class CreatePostView(CreateView):
 
         return context
 
+    # commented out since instructions is to show post after making the post
+    # will automatically use get_absolute_url from post model
+    """
     def get_success_url(self):
-        """redirects user to the profile view once a post is submitted"""
+        #redirects user to the profile view once a post is submitted
         pk = self.kwargs['pk']  # pk to the right profile
         return reverse('show_profile', kwargs={'pk':pk})
+    """
 
     def form_valid(self, form):
         """Handles form submission, used to add foreign key to the post"""
