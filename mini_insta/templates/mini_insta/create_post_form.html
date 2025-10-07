@@ -8,14 +8,14 @@
     <div class="make_post">
         <h1>Creating a new post for {{profile}}</h1>
     <!--the form tag set to post method-->
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
         <!--the actual form that will be used to create the post-->
             {{form}}
             <br>
-        <!--this image url will be used to create an image for the post-->
-            <label for="image_url">Image:</label>
-            <input type="url" name="image_url" id="image_url" placeholder="Image URL">
+        <!--upload all photo files here for the post-->
+            <label for="images">Upload photos:</label>
+            <input type="file" id="images" name="images" multiple>
             <br><br>
             <input type="submit" value="Submit" class="button">
         <!--cancel button. it is an a tag disguised as a button-->

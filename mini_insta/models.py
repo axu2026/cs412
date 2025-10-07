@@ -56,7 +56,7 @@ class Post(models.Model):
 
     def __str__(self):
         """the string representation of the post"""
-        return f'{self.caption}'
+        return f'{self.profile} at {self.timestamp}'
 
     def get_all_photos(self):
         """returns the queryset of all photos from a post"""
@@ -71,7 +71,13 @@ class Post(models.Model):
 
         # check if that photo exists first before returning its url
         if first_photo:
-            return first_photo.image_url
+            # check if theres a url first
+            if first_photo.image_url:
+                return first_photo.image_url
+
+            # if its not a url check for a file and return
+            if first_photo.image_file:
+                return first_photo.image_file.url
         
         # else we return the path to the no image default
         return "../../static/no_image.png"
@@ -93,6 +99,30 @@ class Photo(models.Model):
     # the date the photo was uploaded to the site
     timestamp = models.DateTimeField(auto_now=True)
 
+    # new image file field
+    image_file = models.ImageField(blank=True)
+
     def __str__(self):
         """the string representation for the photo"""
-        return f'{self.image_url}'
+        # if theres a url, use the url for the string
+        if self.image_url:
+            return f'{self.image_url} on {self.timestamp}'
+        
+        # if theres an image file instead, use the file name for the string
+        if self.image_file:
+            return f'{self.image_file} on {self.timestamp}'
+
+        # in case theres no image info
+        return f'no image on {self.timestamp}'
+    
+    def get_image_url(self):
+        """returns the url of the image"""
+        # if theres a url return it
+        if self.image_url:
+            return self.image_url
+        
+        # if theres an image file return the url for it
+        if self.image_file:
+            return self.image_file.url
+        
+        return None # incase of neither

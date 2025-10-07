@@ -21,7 +21,7 @@
                 <p>{{post.caption}}</p>
             <!--displays all images from that post-->
                 {% for photo in post.get_all_photos %}
-                    <img src="{{photo.image_url}}" alt="photo">
+                    <img src="{{photo.get_image_url}}" alt="photo">
                 {% endfor %}
             </div>
         </div>

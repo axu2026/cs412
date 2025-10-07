@@ -73,7 +73,13 @@ class CreatePostView(CreateView):
         self.object = form.save()
 
         # create a new image model from the url and connect it to the post
-        new_image = Photo.objects.create(post=self.object, image_url=self.request.POST['image_url'])
+        #new_image = Photo.objects.create(post=self.object, image_url=self.request.POST['image_url'])
+
+        files = self.request.FILES.getlist('images')
+
+        # go through all files and create the photo records for them
+        for file in files:
+            Photo.objects.create(post=self.object, image_file=file)
 
         # go ask the superclass method to do it with our modified form
         return super().form_valid(form)
