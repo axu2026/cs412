@@ -1,0 +1,15 @@
+{% load static %}
+<html>
+    <head>
+        <title>Create Comment</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    <body>
+        <a href="{% url 'home' %}">go back</a>
+        <form method="POST">
+            {% csrf_token %}
+            {{form}}
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>

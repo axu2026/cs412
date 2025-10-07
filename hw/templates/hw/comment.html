@@ -1,0 +1,18 @@
+{% load static %}
+<html>
+    <head>
+        <title>Comment</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    <body>
+        <a href="{% url 'home' %}">go back</a>
+        <h1>{{comment.username}} on {{comment.timestamp}}</h1>
+        <h2>{{comment.text}}</h2>
+        {% for reply in comment.get_all_replies %}
+            <hr>
+            <h3>{{reply.username}} at {{reply.timestamp}}</h3>
+            <p>{{reply.text}}</p>
+        {% endfor %}
+        <a href="{% url 'create_reply' comment.pk %}">create a reply</a>
+    </body>
+</html>
