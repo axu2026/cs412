@@ -243,18 +243,18 @@ footer > a > img {
     height: auto;
 }
 
-/*css for making posts*/
-.make_post {
+/*css for forms*/
+.forms {
     padding: 1em;
     padding-top: 4em;
 }
 
-.make_post label {
+.forms label {
     display: block;
     font-weight: bold;
 }
 
-.make_post .button {
+.forms .button {
     width: 100px;
     height: 50px;
     font-size: 24;
@@ -265,6 +265,10 @@ footer > a > img {
     transition: 0.2s;
 }
 
-.make_post .button:hover {
+.forms .button:hover {
     background-color: #4f4f4f;
+}
+
+.forms label {
+    margin-top: 20px;
 }

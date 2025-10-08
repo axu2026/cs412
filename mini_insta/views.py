@@ -83,3 +83,10 @@ class CreatePostView(CreateView):
 
         # go ask the superclass method to do it with our modified form
         return super().form_valid(form)
+
+class UpdateProfileView(UpdateView):
+    """A view to update a profile with a form"""
+
+    form_class = UpdateProfileForm
+    template_name = "mini_insta/update_profile_form.html"
+    model = Profile
