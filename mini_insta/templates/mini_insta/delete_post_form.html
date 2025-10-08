@@ -1,0 +1,40 @@
+<!--mini_insta/delete_post_form.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/8/25-->
+<!--Displays the form to prompt the user to delete a post.-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+    <div class="forms">
+        <h1>Delete post from {{profile}} on {{post.timestamp}}?</h1>
+        <div class="single_post">
+        <!--displays profile picture, names, caption, timestamp, and photos-->
+            <div class="post_caption">
+                <div class="pfp">
+                    <a href="{% url 'show_profile' post.profile.pk %}">
+                        <img src="{{post.profile.profile_image_url}}" alt="pfp">
+                    </a>
+                </div>
+            <!--all the actual content of a post here-->
+                <div class="caption">
+                    <a href="{% url 'show_profile' post.profile.pk %}">
+                        {{post.profile.display_name}}
+                    </a>
+                    <span>@{{post.profile.username}} on {{post.timestamp}}</span>
+                    <p>{{post.caption}}</p>
+                </div>
+            </div>
+        </div>
+
+    <!--the form tag set to post method-->
+        <form method="POST">
+            {% csrf_token %}
+        <!--submit button-->
+            <input type="submit" value="Yes" class="button">
+        </form>
+    <!--cancel button as a form-->
+        <form action="{% url 'show_profile' profile.pk %}" method="GET">
+            <input type="submit" value="No" class="button">
+        </form>
+    </div>
+{% endblock %}

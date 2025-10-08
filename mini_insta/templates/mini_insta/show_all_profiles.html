@@ -7,11 +7,13 @@
 {% block content %}
     <!--produces a grid of all the profiles-->
     <div class="all_profiles">
-        <!--go through all the profiles and display their information-->
+    <!--for loop to go through all the profiles and display their information-->
         {% for profile in profiles %}
             <div class="square">
             <!--make the display name clickable too-->
-                <a href="{% url 'show_profile' profile.pk %}" class="name">{{profile.display_name}}</a>
+                <a href="{% url 'show_profile' profile.pk %}" class="name">
+                    {{profile.display_name}}
+                </a>
                 <p>@{{profile.username}}</p>
             <!--makes the picture clickable to take user to profile-->
                 <a href="{% url 'show_profile' profile.pk %}" class="img">

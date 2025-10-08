@@ -1,22 +1,26 @@
-<!--mini_insta/update_profile_form.html-->
-<!--Aidan Xu (axu26@bu.edu), 10/7/25-->
-<!--Displays the form to be used when updating a profile.-->
+<!--mini_insta/update_post_form.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/8/25-->
+<!--Displays the form to update a post.-->
 
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
     <div class="forms">
-        <h1>Updating profile for {{profile}}</h1>
+        <h1>Updating post by {{profile}} on {{post.timestamp}}</h1>
     <!--the form tag set to post method-->
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-        <!--the actual form that will be used to update the post-->
+        <!--the actual form that will be used to create the post-->
             {{form}}
+        <!--upload additional photo files-->
+            <label for="images">Add more photos:</label>
+            <input type="file" id="images" name="images" multiple>
+            <br>
         <!--submit button-->
             <br>
             <input type="submit" value="Update" class="button">
         <!--cancel button. it is an a tag disguised as a button-->
-            <a href="{% url 'show_profile' profile.pk %}">
+            <a href="{% url 'show_post' post.pk %}">
                 <input type="button" value="Cancel" class="button">
             </a>
             <br><br><br>

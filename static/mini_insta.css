@@ -243,10 +243,31 @@ footer > a > img {
     height: auto;
 }
 
+.del {
+    vertical-align: top;
+    background-color: #4f4f4f;
+    border-radius: 5px;
+}
+
+.del img {
+    width: 30px;
+    height: 30px;
+}
+
+.del_photo {
+    height: 300px;
+    width: auto;
+    border-radius: 5px;
+}
+
 /*css for forms*/
 .forms {
     padding: 1em;
     padding-top: 4em;
+}
+
+.forms form {
+    display: inline-block;
 }
 
 .forms label {
@@ -271,4 +292,9 @@ footer > a > img {
 
 .forms label {
     margin-top: 20px;
+}
+
+.forms .single_post {
+    padding-top: 1em;
+    padding-bottom: 2em;
 }

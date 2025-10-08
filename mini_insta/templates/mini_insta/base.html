@@ -20,14 +20,34 @@
         {% endblock %}
     <!--footer-->
         <footer>
-            <a href="{% url 'show_all_profiles' %}"><img src="{% static 'home.webp' %}" alt = "home"></a>
-        <!--check if there is a profile on the page, then allow post creation/updating-->
+            <a href="{% url 'show_all_profiles' %}">
+                <img src="{% static 'home.webp' %}" alt = "home">
+            </a>
+        <!--conditionals to see which operations to display-->
+        <!--check for profile on the page, then allow post creation/updating-->
             {% if profile %}
-                <a href="{% url 'create_post' profile.pk %}"><img src="{% static 'plus.png' %}" alt = "post"></a>
-                <a href="{% url 'update_profile' profile.pk %}"><img src="{% static 'edit.webp' %}" alt = "update"></a>
-        <!--check if there is a post on the page, then make a back to profile button-->
+            <!--create a post-->
+                <a href="{% url 'create_post' profile.pk %}">
+                    <img src="{% static 'plus.png' %}" alt = "post">
+                </a>
+            <!--update a profile-->
+                <a href="{% url 'update_profile' profile.pk %}">
+                    <img src="{% static 'edit.webp' %}" alt = "update">
+                </a>
+        <!--check for a post on the page, then make respective buttons-->
             {% elif post %}
-                <a href="{% url 'show_profile' post.profile.pk %}"><img src="{% static 'back.webp' %}" alt = "back"></a>
+            <!--go back to profile-->
+                <a href="{% url 'show_profile' post.profile.pk %}">
+                    <img src="{% static 'back.webp' %}" alt = "back">
+                </a>
+            <!--delete a post-->
+                <a href="{% url 'delete_post' post.pk %}">
+                    <img src="{% static 'delete.png' %}" alt = "delete">
+                </a>
+            <!--update a post-->
+                <a href="{% url 'update_post' post.pk %}">
+                    <img src="{% static 'edit.webp' %}" alt = "update">
+                </a>
             {% endif %}
         </footer>
     </body>

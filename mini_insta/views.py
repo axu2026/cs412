@@ -84,9 +84,107 @@ class CreatePostView(CreateView):
         # go ask the superclass method to do it with our modified form
         return super().form_valid(form)
 
+
 class UpdateProfileView(UpdateView):
     """A view to update a profile with a form"""
 
     form_class = UpdateProfileForm
     template_name = "mini_insta/update_profile_form.html"
     model = Profile
+
+
+class DeletePostView(DeleteView):
+    """A view to prompt the user to delete a post"""
+
+    template_name = "mini_insta/delete_post_form.html"
+    model = Post
+
+    def get_success_url(self):
+        """return url back to the profile that the delete post came from"""
+        
+        pk = self.kwargs['pk']         # access the post to access the profile
+        post = Post.objects.get(pk=pk) # get post object
+        profile = post.profile         # the profile object
+
+        return reverse('show_profile', kwargs={'pk': profile.pk})
+
+    def get_context_data(self, **kwargs):
+        """override for the context data"""
+
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']          # the post pk
+        post = Post.objects.get(pk=pk)
+        profile = post.profile          # find the profile from post
+
+        # add both to context
+        context['post'] = post
+        context['profile'] = profile
+
+        return context
+
+
+class UpdatePostView(UpdateView):
+    """A view to update a post"""
+
+    form_class = UpdatePostForm
+    template_name = "mini_insta/update_post_form.html"
+    model = Post
+
+    def get_context_data(self):
+        """specifies context variables for the post update view"""
+
+        # find the key of the post, get the post, get the profile
+        context = super().get_context_data()
+        pk = self.kwargs['pk']
+        post = Post.objects.get(pk=pk)
+        profile = post.profile
+
+        # add that profile to the context
+        context['profile'] = profile
+
+        return context
+    
+    def form_valid(self, form):
+        """Handles form submission to add additional photos"""
+
+        # get files uploaded by the form
+        files = self.request.FILES.getlist('images')
+
+        # find the post object to save to the new photo's foreign key
+        pk = self.kwargs['pk']
+        post = Post.objects.get(pk=pk)
+
+        # go through all files and create the photo records for them
+        for file in files:
+            Photo.objects.create(post=post, image_file=file)
+
+        # go ask the superclass method to do it with our modified form
+        return super().form_valid(form)
+    
+
+class DeletePhotoView(DeleteView):
+    """View to confirm delettion of a photo"""
+
+    template_name = "mini_insta/delete_photo_form.html"
+    model = Photo
+
+    def get_context_data(self, **kwargs):
+        """override for the context data"""
+
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']          # find photo with pk
+        photo = Photo.objects.get(pk=pk)
+
+        # add to context
+        context['photo'] = photo
+
+        return context
+    
+    def get_success_url(self):
+        """return the url after successfully deleting photo"""
+        
+        pk = self.kwargs['pk']
+        photo = Photo.objects.get(pk=pk)
+        post = photo.post   # take back to the post after deletion
+
+        return reverse('show_post', kwargs={'pk': post.pk})

@@ -1,0 +1,23 @@
+<!--mini_insta/delete_photo_form.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/8/25-->
+<!--Displays the form to prompt the user to delete a photo.-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+    <div class="forms">
+        <h1>Delete photo from this post?</h1>
+        <img src="{{photo.get_image_url}}" alt="photo" class="del_photo">
+        <br><br>
+    <!--the form tag set to post method-->
+        <form method="POST">
+            {% csrf_token %}
+        <!--submit button-->
+            <input type="submit" value="Yes" class="button">
+        </form>
+    <!--cancel button as a form-->
+        <form action="{% url 'show_post' photo.post.pk %}" method="GET">
+            <input type="submit" value="No" class="button">
+        </form>
+    </div>
+{% endblock %}
