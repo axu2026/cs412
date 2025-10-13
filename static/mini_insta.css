@@ -75,7 +75,7 @@ footer > a > img {
     color:grey;
 }
 
-.all_profiles .square .img {
+.img {
     display: inline-block;
     width: 200px;
     height: 200px;
@@ -86,7 +86,7 @@ footer > a > img {
     border: 2px solid #62d7bc;
 }
 
-.all_profiles .square a img {
+.img img {
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -94,7 +94,7 @@ footer > a > img {
     transition: transform 0.2s;
 }
 
-.all_profiles .square a img:hover {
+.img img:hover {
     transform: scale(1.1);
 }
 
@@ -186,6 +186,32 @@ footer > a > img {
     transform: scale(1.1);
 }
 
+/*follows pages*/
+.follow_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 0));
+}
+
+.follow {
+    margin: auto;
+    text-align: center;
+}
+
+.follow_grid .follow .name {
+    text-align: center;
+    margin: auto;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.follow_grid .follow p {
+    text-align: center;
+    margin: 0;
+    color:grey;
+}
+
+
 /*for single post*/
 .single_post {
     padding: 1em;
@@ -259,6 +285,67 @@ footer > a > img {
     width: auto;
     border-radius: 5px;
 }
+
+.post_and_comments {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+}
+
+.comments {
+    background-color: #ececec;
+    height: max(100%, 100vh);
+    padding: 10px;
+}
+
+.comments h1 {
+    margin-top: 2em;
+}
+
+.comment {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+}
+
+.comment_img_container {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.comment_img_container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-fit: cover;
+    transition: transform 0.2s;
+}
+
+.comment_img_container img:hover {
+    transform: scale(1.1);
+}
+
+.comment a {
+    text-decoration: none;
+    color: black;
+}
+
+.comment span {
+    color:grey;
+}
+
+.comment p {
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.comment .comment_text {
+    padding-left: 8px;
+}
+
 
 /*css for forms*/
 .forms {

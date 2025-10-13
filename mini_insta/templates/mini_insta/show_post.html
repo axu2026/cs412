@@ -7,30 +7,53 @@
 
 {% block content %}
 <!--html for a single post-->
-    <div class="single_post">
-    <!--displays profile picture, names, caption, timestamp, and photos-->
-        <div class="post_caption">
-            <div class="pfp">
-                <a href="{% url 'show_profile' post.profile.pk %}">
-                    <img src="{{post.profile.profile_image_url}}" alt="pfp">
-                </a>
-            </div>
-        <!--all the actual content of a post here-->
-            <div class="caption">
-                <a href="{% url 'show_profile' post.profile.pk %}">
-                    {{post.profile.display_name}}
-                </a>
-                <span>@{{post.profile.username}} on {{post.timestamp}}</span>
-                <p>{{post.caption}}</p>
-            <!--for loop to display all images from that post-->
-                {% for photo in post.get_all_photos %}
-                    <img src="{{photo.get_image_url}}" alt="photo">
-                    <a href="{% url 'delete_photo' photo.pk %}" class="del">
-                        <img src="{% static 'delete.png' %}" alt="delete">
+    <div class="post_and_comments">
+        <div class="single_post">
+        <!--displays profile picture, names, caption, timestamp, and photos-->
+            <div class="post_caption">
+                <div class="pfp">
+                    <a href="{% url 'show_profile' post.profile.pk %}">
+                        <img src="{{post.profile.profile_image_url}}" alt="pfp">
                     </a>
-                    <hr>
-                {% endfor %}
+                </div>
+            <!--all the actual content of a post here-->
+                <div class="caption">
+                    <a href="{% url 'show_profile' post.profile.pk %}">
+                        {{post.profile.display_name}}
+                    </a>
+                    <span>@{{post.profile.username}} on {{post.timestamp}}</span>
+                    <p>{{post.caption}}</p>
+                <!--for loop to display all images from that post-->
+                    {% for photo in post.get_all_photos %}
+                        <img src="{{photo.get_image_url}}" alt="photo">
+                        <a href="{% url 'delete_photo' photo.pk %}" class="del">
+                            <img src="{% static 'delete.png' %}" alt="delete">
+                        </a>
+                        <hr>
+                    {% endfor %}
+                    <p>{{post.get_like_count}} {{post.get_example_likers}}</p>
+                </div>
             </div>
+        </div>
+        <div class="comments">
+            <h1>Comments</h1>
+        <!--display all comments for the post-->
+            {% for comment in post.get_all_comments %}
+                <div class="comment">
+                    <a href="{% url 'show_profile' comment.profile.pk %}" 
+                    class="comment_img_container">
+                        <img src="{{comment.profile.profile_image_url}}">
+                    </a>
+                    <div class="comment_text">
+                        <a href="{% url 'show_profile' comment.profile.pk %}">
+                            <strong>{{comment.profile.display_name}}</strong>
+                        </a>
+                        <span> on {{comment.timestamp}}</span>
+                        <p>{{comment.text}}</p>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

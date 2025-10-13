@@ -188,3 +188,19 @@ class DeletePhotoView(DeleteView):
         post = photo.post   # take back to the post after deletion
 
         return reverse('show_post', kwargs={'pk': post.pk})
+    
+
+class ShowFollowersDetailView(DetailView):
+    """view showing all a profile's followers"""
+
+    model = Profile
+    template_name = "mini_insta/show_followers.html"
+    context_object_name = "profile"
+
+
+class ShowFollowingDetailView(DetailView):
+    """view showing all a profile's follows"""
+
+    model = Profile
+    template_name = "mini_insta/show_following.html"
+    context_object_name = "profile"

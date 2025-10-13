@@ -1,0 +1,58 @@
+<!--mini_insta/base_profile.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/13/25-->
+<!--The base html for profile display. Doing this to not have to
+    rewrite code again for each view-->
+
+{% extends 'mini_insta/base.html' %}
+{% load static %}
+
+{% block content %}
+<!--the info of a specific profile-->
+    <div class="single_profile">
+        <div class="side_info">
+        <!--image part of the div-->
+            <div class="img_container_single">
+                <img src="{{profile.profile_image_url}}" alt="profile picture">
+            </div>
+        <!--info part of the div-->
+            <div class="info">
+            <!--profile info-->
+                <div>
+                    <h1>{{profile.display_name}}</h1> 
+                    <h3>@{{profile.username}}</h3>
+                </div>
+                <p>Joined {{profile.join_date}}</p>
+            <!--bio part-->
+                <p>{{profile.bio_text}}</p>
+            <!--table for followers and stats-->
+                <table>
+                    <tr>
+                        <td><strong>Posts:</strong></td>
+                        <td><strong>Followers:</strong></td>
+                        <td><strong>Following:</strong></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="{% url 'show_profile' profile.pk %}">
+                                {{profile.get_posts_count}}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'show_followers' profile.pk %}">
+                                {{profile.get_num_followers}}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'show_following' profile.pk %}">
+                                {{profile.get_num_following}}
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    <!--actual content-->
+        {% block list %}
+        {% endblock %}
+    </div>
+{% endblock %}

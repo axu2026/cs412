@@ -2,54 +2,19 @@
 <!--Aidan Xu (axu26@bu.edu), 9/25/25-->
 <!--The page that will show a single profile with detail.-->
 
-{% extends 'mini_insta/base.html' %}
+{% extends 'mini_insta/base_profile.html' %}
 {% load static %}
 
-{% block content %}
-<!--the info of a specific profile-->
-    <div class="single_profile">
-        <div class="side_info">
-        <!--image part of the div-->
-            <div class="img_container_single">
-                <img src="{{profile.profile_image_url}}" alt="profile picture">
-            </div>
-        <!--info part of the div-->
-            <div class="info">
-            <!--profile info-->
-                <div>
-                    <h1>{{profile.display_name}}</h1> 
-                    <h3>@{{profile.username}}</h3>
-                </div>
-                <p>Joined {{profile.join_date}}</p>
-            <!--bio part-->
-                <p>{{profile.bio_text}}</p>
-            <!--table for followers and stats. there are placeholders for now-->
-                <table>
-                    <tr>
-                        <td><strong>Posts:</strong></td>
-                        <td><strong>Followers:</strong></td>
-                        <td><strong>Following:</strong></td>
-                    </tr>
-                    <tr>
-                        <td>{{profile.get_posts_count}}</td>
-                        <!--placeholder values-->
-                        <td>N/A</td>
-                        <td>N/A</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    <!--actual content-->
-        <div class="show_posts">
-            <h1>Posts</h1>
-            <div class="posts_grid">
-            <!--go through all the profile's posts and display them-->
-                {% for post in profile.get_all_posts %}
-                    <a href="{% url 'show_post' post.pk%}">
-                        <img src={{post.get_first_photo}} alt="image">
-                    </a>
-                {% endfor %}
-            </div>
+{% block list %}
+    <div class="show_posts">
+        <h1>Posts</h1>
+        <div class="posts_grid">
+        <!--go through all the profile's posts and display them-->
+            {% for post in profile.get_all_posts %}
+                <a href="{% url 'show_post' post.pk%}">
+                    <img src={{post.get_first_photo}} alt="image">
+                </a>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

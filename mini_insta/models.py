@@ -41,6 +41,36 @@ class Profile(models.Model):
         """returns the url to an instance of a profile"""
         return reverse('show_profile', kwargs={'pk':self.pk})
     
+    def get_followers(self):
+        """returns the list of profiles following this profile"""
+        result = [] # the actual return result of profiles
+        follows = Follow.objects.filter(profile=self)
+
+        # iterate through the list of follows and append follower to result list
+        for follow in follows:
+            result.append(follow.follower_profile)
+
+        return result
+    
+    def get_num_followers(self):
+        """returns the number of followers a profile has"""
+        return Follow.objects.filter(profile=self).count()
+    
+    def get_following(self):
+        """returns the list of profiles that the profile follows"""
+        result = [] # the actual return result of profiles
+        follows = Follow.objects.filter(follower_profile=self)
+
+        # iterate through the list of follows and append profile to result list
+        for follow in follows:
+            result.append(follow.profile)
+
+        return result
+
+    def get_num_following(self):
+        """return the number of profiles the user follows"""
+        return Follow.objects.filter(follower_profile=self).count()
+    
 
 class Post(models.Model):
     """class representing the data for posts that users can make"""
@@ -85,6 +115,45 @@ class Post(models.Model):
     def get_absolute_url(self):
         """returns the url to an instance of a post"""
         return reverse('show_post', kwargs={'pk':self.pk})
+    
+    def get_all_comments(self):
+        """returns all comments for this post"""
+        comments = Comment.objects.filter(post=self)
+        return comments
+    
+    def get_likes(self):
+        """returns the likes from the post"""
+        likes = Like.objects.filter(post=self)
+        return likes
+    
+    def get_like_count(self):
+        """return the number of likes a post has"""
+        return Like.objects.filter(post=self).count()
+    
+    def get_example_likers(self):
+        """return a string of who may be liking a post"""
+        count = self.get_like_count()
+        
+        # cases for which strings to return
+        if count == 0:
+            # no likes
+            return 'likes'
+        elif count == 1:
+            # only one like, get the liker
+            like = self.get_likes().first()
+            return f'like by @{like.profile}'
+        else:
+            # multiple likers, return an example liker and count of others
+            like = self.get_likes().first()
+            others = count - 1
+            end_word = "others"
+
+            # adjusting grammar of the statement accordingly
+            if others == 1:
+                end_word = "other"
+
+            return f'likes by @{like.profile} and {others} {end_word}'
+
 
 
 class Photo(models.Model):
@@ -126,3 +195,61 @@ class Photo(models.Model):
             return self.image_file.url
         
         return None # incase of neither
+    
+
+class Follow(models.Model):
+    """class representing the follow linking two profiles together"""
+
+    # the following profile
+    follower_profile = models.ForeignKey(Profile, 
+                                         on_delete=models.CASCADE, 
+                                         related_name="follower_profile")
+    
+    # the profile being followed
+    profile = models.ForeignKey(Profile, 
+                                on_delete=models.CASCADE, 
+                                related_name="profile")
+    
+    # the date when follower started following
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        """return the string representation of the follow"""
+        return f'{self.follower_profile} is following {self.profile}'
+    
+
+class Comment(models.Model):
+    """class representing a comment on a post"""
+
+    # the foreign key to the post the comment is on
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    # the foreign key to the profile making the comment
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    # the time the comment was created
+    timestamp = models.DateTimeField(auto_now=True)
+
+    # the text field for the comment
+    text = models.TextField(blank=True)
+
+    def __str__(self):
+        """returns a string representation of a comment"""
+        return f'{self.profile}\'s comment on {self.timestamp}'
+    
+
+class Like(models.Model):
+    """class representing a like on a post from a profile"""
+
+    # foreign key of the post that the like is on
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    # the foreign key of the profile doing the like
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    # the time the like was created
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        """string representation of the like"""
+        return f'{self.profile} liked {self.post}'

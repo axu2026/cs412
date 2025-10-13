@@ -1,0 +1,29 @@
+<!--mini_insta/show_following.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/12/25-->
+<!--The page that will show who the profile follows.-->
+
+{% extends 'mini_insta/base_profile.html' %}
+{% load static %}
+
+{% block list %}
+<!--borrowing a lot of existing html-->
+    <div class="show_posts">
+        <h1>{{profile.display_name}} follows</h1>
+        <div class="follow_grid">
+        <!--go through all the profile's followers and display them-->
+            {% for following in profile.get_following %}
+                <div class="follow">
+                <!--make the display name clickable too-->
+                    <a href="{% url 'show_profile' following.pk %}" class="name">
+                        {{following.display_name}}
+                    </a>
+                    <p>@{{following.username}}</p>
+                <!--makes the picture clickable to take user to profile-->
+                    <a href="{% url 'show_profile' following.pk %}" class="img">
+                        <img src="{{following.profile_image_url}}" alt="profile picture">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
