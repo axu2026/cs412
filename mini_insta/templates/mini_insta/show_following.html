@@ -7,7 +7,7 @@
 
 {% block list %}
 <!--borrowing a lot of existing html-->
-    <div class="show_posts">
+    <div class="show_profile_content">
         <h1>{{profile.display_name}} follows</h1>
         <div class="follow_grid">
         <!--go through all the profile's followers and display them-->
@@ -19,8 +19,8 @@
                     </a>
                     <p>@{{following.username}}</p>
                 <!--makes the picture clickable to take user to profile-->
-                    <a href="{% url 'show_profile' following.pk %}" class="img">
-                        <img src="{{following.profile_image_url}}" alt="profile picture">
+                    <a href="{% url 'show_profile' following.pk %}" class="img_container">
+                        <img src="{{following.profile_image_url}}" alt="profile picture" class="img_hover">
                     </a>
                 </div>
             {% endfor %}

@@ -6,13 +6,13 @@
 {% load static %}
 
 {% block list %}
-    <div class="show_posts">
+    <div class="show_profile_content">
         <h1>Posts</h1>
         <div class="posts_grid">
         <!--go through all the profile's posts and display them-->
             {% for post in profile.get_all_posts %}
                 <a href="{% url 'show_post' post.pk%}">
-                    <img src={{post.get_first_photo}} alt="image">
+                    <img src={{post.get_first_photo}} alt="image" class="img_hover">
                 </a>
             {% endfor %}
         </div>

@@ -204,3 +204,24 @@ class ShowFollowingDetailView(DetailView):
     model = Profile
     template_name = "mini_insta/show_following.html"
     context_object_name = "profile"
+
+
+class PostFeedListView(ListView):
+    """view showing all posts for a user's feed"""
+
+    model = Post
+    template_name = "mini_insta/show_feed.html"
+    context_object_name = "posts" # all posts
+
+    def get_context_data(self):
+        """specifies context variables for feed"""
+
+        # find the key of the profile and get it
+        context = super().get_context_data()
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+
+        # add that profile to the context
+        context['profile'] = profile
+
+        return context

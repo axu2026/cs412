@@ -42,10 +42,21 @@ footer {
     text-align: center;
 }
 
-footer > a > img {
+.opt {
     width: 32px;
     height: 32px;
     padding: 4px;
+}
+
+.profile_home {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3px;
 }
 
 
@@ -75,7 +86,7 @@ footer > a > img {
     color:grey;
 }
 
-.img {
+.img_container {
     display: inline-block;
     width: 200px;
     height: 200px;
@@ -86,7 +97,7 @@ footer > a > img {
     border: 2px solid #62d7bc;
 }
 
-.img img {
+.img_hover {
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -94,7 +105,7 @@ footer > a > img {
     transition: transform 0.2s;
 }
 
-.img img:hover {
+.img_hover:hover {
     transform: scale(1.1);
 }
 
@@ -148,7 +159,7 @@ footer > a > img {
 }
 
 /*for posts*/
-.show_posts {
+.show_profile_content {
     padding: 2em;
     padding-top: 4em;
     padding-bottom: 3em;
@@ -172,18 +183,6 @@ footer > a > img {
     border-radius: 5px;
     margin-left: auto;
     margin-right: auto;
-}
-
-.posts_grid a img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-fit: cover;
-    transition: transform 0.2s;
-}
-
-.posts_grid a img:hover {
-    transform: scale(1.1);
 }
 
 /*follows pages*/
@@ -211,7 +210,6 @@ footer > a > img {
     color:grey;
 }
 
-
 /*for single post*/
 .single_post {
     padding: 1em;
@@ -234,28 +232,23 @@ footer > a > img {
     margin-right: auto;
 }
 
-.post_caption .pfp a img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-fit: cover;
-    transition: transform 0.2s;
-}
-
-.post_caption .pfp a img:hover {
-    transform: scale(1.1);
-}
-
 .caption {
     margin-left: 1em;
 }
 
 .post_caption .caption a {
-    display: inline-block;
     text-decoration: none;
     color: black;
-    font-weight: bold;
     margin: 0;
+}
+
+.caption .post_name {
+    display: inline-block;
+    font-weight: bold;
+}
+
+.block_please {
+    display: block;
 }
 
 .caption span {
@@ -266,10 +259,27 @@ footer > a > img {
 .caption img {
     border-radius: 5px;
     max-width: 640px;
-    height: auto;
+    margin-right: 8px;
+}
+
+.caption p {
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
+.additional_comments {
+    color: gray;
+}
+
+.img_del {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
 .del {
+    margin-left: 4px;
+    width: 30px;
+    height: 30px;
     vertical-align: top;
     background-color: #4f4f4f;
     border-radius: 5px;
@@ -294,11 +304,11 @@ footer > a > img {
 .comments {
     background-color: #ececec;
     height: max(100%, 100vh);
-    padding: 10px;
+    padding: 12px;
 }
 
-.comments h1 {
-    margin-top: 2em;
+.comments h2 {
+    margin-top: 3em;
 }
 
 .comment {
@@ -314,18 +324,6 @@ footer > a > img {
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
-}
-
-.comment_img_container img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-fit: cover;
-    transition: transform 0.2s;
-}
-
-.comment_img_container img:hover {
-    transform: scale(1.1);
 }
 
 .comment a {

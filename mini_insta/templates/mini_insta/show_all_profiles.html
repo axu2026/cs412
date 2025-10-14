@@ -16,8 +16,8 @@
                 </a>
                 <p>@{{profile.username}}</p>
             <!--makes the picture clickable to take user to profile-->
-                <a href="{% url 'show_profile' profile.pk %}" class="img">
-                    <img src="{{profile.profile_image_url}}" alt="profile picture">
+                <a href="{% url 'show_profile' profile.pk %}" class="img_container">
+                    <img src="{{profile.profile_image_url}}" alt="profile picture" class="img_hover">
                 </a>
             </div>
         {% endfor %}

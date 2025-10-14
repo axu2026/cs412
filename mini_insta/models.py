@@ -4,6 +4,7 @@
 
 from django.db import models
 from django.urls import reverse
+import random
 
 # Create your models here.
 class Profile(models.Model):
@@ -71,6 +72,23 @@ class Profile(models.Model):
         """return the number of profiles the user follows"""
         return Follow.objects.filter(follower_profile=self).count()
     
+    def get_post_feed(self):
+        """returns a list of posts from the user's following"""
+        followed = self.get_following() # get followers of the profile
+        result = []                     # store all posts here
+
+        # go through all followers and add their posts to feed
+        for follow in followed:
+            posts = Post.objects.filter(profile=follow)
+            # append these posts to the result
+            for post in posts:
+                result.append(post)
+
+        # shuffle the result so that the feed is more varied
+        random.shuffle(result)
+
+        return result
+    
 
 class Post(models.Model):
     """class representing the data for posts that users can make"""
@@ -112,6 +130,15 @@ class Post(models.Model):
         # else we return the path to the no image default
         return "../../static/no_image.png"
     
+    def can_show_photo_feed(self):
+        """check if a photo can be shown on a feed"""
+
+        # if there is no photo
+        if Photo.objects.filter(post=self).count() <= 0:
+            return False
+        
+        return True
+    
     def get_absolute_url(self):
         """returns the url to an instance of a post"""
         return reverse('show_post', kwargs={'pk':self.pk})
@@ -121,6 +148,24 @@ class Post(models.Model):
         comments = Comment.objects.filter(post=self)
         return comments
     
+    def get_comment_count(self):
+        """returns number of comments for a post"""
+        return Comment.objects.filter(post=self).count()
+
+    def get_comments_left_feed(self):
+        """for the feed, returns number of comments left"""
+        count = self.get_comment_count() - 3 # get amount
+
+        # case for 1 or multiple left
+        if count == 1:
+            return 'and 1 more comment...'
+        elif count > 1:
+            return f'and {count} more comments'
+        
+        # no additional comments
+        return ""
+
+
     def get_likes(self):
         """returns the likes from the post"""
         likes = Like.objects.filter(post=self)
@@ -153,6 +198,22 @@ class Post(models.Model):
                 end_word = "other"
 
             return f'likes by @{like.profile} and {others} {end_word}'
+        
+    def get_first_few_comments(self):
+        """obtain the first few comments to be displayed in feed"""
+        result = []
+        comments = Comment.objects.filter(post=self)
+
+        # go through comments
+        for comment in comments:
+            result.append(comment) # add comment to result list
+
+            # after getting 3, stop getting anymore
+            if len(result) > 2:
+                break
+
+        return result
+            
 
 
 

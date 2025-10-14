@@ -1,0 +1,61 @@
+<!--mini_insta/show_feed.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/13/25-->
+<!--The page that will show a profile's feed.-->
+
+{% extends 'mini_insta/base_profile.html' %}
+{% load static %}
+
+{% block list %}
+    <div class="show_profile_content">
+        <h1>Feed</h1>
+        {% for post in profile.get_post_feed %}
+        <!--displays profile picture, names, caption, timestamp, and photos-->
+            <div class="post_caption">
+                <div class="pfp">
+                    <a href="{% url 'show_profile' post.profile.pk %}">
+                        <img src="{{post.profile.profile_image_url}}" alt="pfp" class="img_hover">
+                    </a>
+                </div>
+            <!--all the actual content of a post here-->
+                <div class="caption">
+                    <a href="{% url 'show_profile' post.profile.pk %}" class="post_name">
+                        {{post.profile.display_name}}
+                    </a>
+                    <span>@{{post.profile.username}} on {{post.timestamp}}</span>
+                    <a href="{% url 'show_post' post.pk %}" class="block_please">
+                        <p>
+                            {{post.caption}}
+                        </p>
+                    </a>
+                <!--check if we can show a photo for the feed-->
+                    {% if post.can_show_photo_feed %}
+                        <a href="{% url 'show_post' post.pk %}">
+                            <img src="{{post.get_first_photo}}" alt="photo">
+                        </a>
+                    {% endif %}
+                    <p>{{post.get_like_count}} {{post.get_example_likers}}</p>
+                <!--display a few example comments-->
+                    {% for comment in post.get_first_few_comments %}
+                        <hr>
+                        <div class="comment">
+                            <a href="{% url 'show_profile' comment.profile.pk %}" 
+                            class="comment_img_container">
+                                <img src="{{comment.profile.profile_image_url}}" class="img_hover">
+                            </a>
+                            <div class="comment_text">
+                                <a href="{% url 'show_profile' comment.profile.pk %}">
+                                    <strong>{{comment.profile.display_name}}</strong>
+                                </a>
+                                <span> on {{comment.timestamp}}</span>
+                                <p>{{comment.text}}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                <!--show remaining comments if there are more than the few shown-->
+                    <p class="additional_comments">{{post.get_comments_left_feed}}</p>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+{% endblock %}
