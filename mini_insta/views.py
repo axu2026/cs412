@@ -225,3 +225,65 @@ class PostFeedListView(ListView):
         context['profile'] = profile
 
         return context
+    
+
+class SearchView(ListView):
+    """view that gives the user a search bar to find posts/profiles"""
+
+    template_name = "mini_insta/search_results.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        """override the superclass dispatch method"""
+
+        # if there is no query made yet, send the search form
+        if not 'query' in self.request.GET:
+            # find profile of the user making search and put it into context
+            pk = self.kwargs['pk']
+            profile = Profile.objects.get(pk=pk)
+            context = {
+                "profile": profile,
+            }
+            return render(request, "mini_insta/search.html", context)
+
+        # else show the results of query
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        """returns a queryset of posts based on the query"""
+        query = self.request.GET['query']
+
+        # get the query set of posts from the caption
+        qs_caption = Post.objects.filter(caption__contains=query)
+
+        return qs_caption
+
+    def get_context_data(self, **kwargs):
+        """specifies context variables for search"""
+
+        # find the key of the profile and get it
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+
+        # add that profile that is searching to the context
+        context['profile'] = profile
+
+        # if there is a query, then return the search query
+        if 'query' in self.request.GET:
+            query = self.request.GET['query']
+
+            # for profile query sets, union them to avoid duplciates
+            profiles_username = Profile.objects.filter(username__contains=query)
+            profiles_display = Profile.objects.filter(display_name__contains=query)
+            profiles_bio = Profile.objects.filter(bio_text__contains=query)
+            profiles = profiles_username.union(profiles_display).union(profiles_bio)
+
+            # for post query sets
+            posts = self.get_queryset()
+
+            # add them to the context
+            context['profiles'] = profiles
+            context['posts'] = posts
+            context['query'] = query
+
+        return context

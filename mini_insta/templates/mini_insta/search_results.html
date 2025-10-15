@@ -1,14 +1,38 @@
-<!--mini_insta/show_feed.html-->
+<!--mini_insta/search_results.html-->
 <!--Aidan Xu (axu26@bu.edu), 10/13/25-->
-<!--The page that will show a profile's feed.-->
+<!--Displays the stuff from the query search.-->
 
-{% extends 'mini_insta/base_profile.html' %}
-{% load static %}
+{% extends 'mini_insta/base.html' %}
 
-{% block list %}
-    <div class="show_profile_content">
-        <h1>Feed</h1>
-        {% for post in profile.get_post_feed %}
+{% block content %}
+    <div class="forms">
+        <h1>Results for "{{query}}"</h1>
+        <h3>Profiles ({{profiles.count}})</h3>
+    <!--iterate through all of the profiles and display them-->
+        {% for p in profiles %}
+            <div class="post_caption">
+                <div class="pfp">
+                    <a href="{% url 'show_profile' p.pk %}">
+                        <img src="{{p.profile_image_url}}" alt="pfp" class="img_hover">
+                    </a>
+                </div>
+                <div class="caption">
+                    <a href="{% url 'show_profile' p.pk %}" class="post_name">
+                        {{p.display_name}}
+                    </a>
+                    <span>{{p.username}}</span>
+                    <p class="search_prof_info">Joined on {{p.join_date}} • 
+                        {{p.get_num_followers}} followers • 
+                        {{p.get_posts_count}} posts
+                    </p>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+        <h3>Posts ({{posts.count}})</h3>
+    <!--iterate through all of the posts and display them-->
+        {% for post in posts %}
+        <!--borrowing a lot of code from previous thing-->
         <!--displays profile picture, names, caption, timestamp, and photo-->
             <div class="post_caption">
                 <div class="pfp">

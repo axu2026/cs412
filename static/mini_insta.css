@@ -383,3 +383,9 @@ footer {
     padding-top: 1em;
     padding-bottom: 2em;
 }
+
+
+/*for search page*/
+.search_prof_info {
+    color: gray;
+}

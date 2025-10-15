@@ -215,8 +215,6 @@ class Post(models.Model):
         return result
             
 
-
-
 class Photo(models.Model):
     """class representing the data for a photo attached to a post"""
 

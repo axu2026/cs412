@@ -30,6 +30,10 @@
                 <a href="{% url 'show_feed' profile.pk %}">
                     <img src="{% static 'home.webp' %}" alt = "feed" class="opt">
                 </a>
+            <!--search bar-->
+                <a href="{% url 'search' profile.pk %}">
+                    <img src="{% static 'search.png' %}" alt = "search" class="opt">
+                </a>
             <!--create a post-->
                 <a href="{% url 'create_post' profile.pk %}">
                     <img src="{% static 'plus.png' %}" alt = "post" class="opt">

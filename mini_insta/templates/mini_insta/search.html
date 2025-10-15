@@ -1,0 +1,21 @@
+<!--mini_insta/search.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/13/25-->
+<!--Displays the form to find a query.-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+    <div class="forms">
+        <h1>Search</h1>
+    <!--the form tag set to post method-->
+        <form method="GET">
+            <textarea name="query" cols="60" placeholder="Enter query for posts or profiles..."></textarea>
+            <br><br>
+            <input type="submit" value="Submit" class="button">
+        <!--cancel button. it is an a tag disguised as a button-->
+            <a href="{% url 'show_profile' profile.pk %}">
+                <input type="button" value="Cancel" class="button">
+            </a>
+        </form>
+    </div>
+{% endblock %}

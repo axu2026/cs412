@@ -42,10 +42,21 @@ footer {
     text-align: center;
 }
 
-footer > a > img {
+.opt {
     width: 32px;
     height: 32px;
     padding: 4px;
+}
+
+.profile_home {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3px;
 }
 
 
@@ -75,7 +86,7 @@ footer > a > img {
     color:grey;
 }
 
-.all_profiles .square .img {
+.img_container {
     display: inline-block;
     width: 200px;
     height: 200px;
@@ -86,7 +97,7 @@ footer > a > img {
     border: 2px solid #62d7bc;
 }
 
-.all_profiles .square a img {
+.img_hover {
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -94,7 +105,7 @@ footer > a > img {
     transition: transform 0.2s;
 }
 
-.all_profiles .square a img:hover {
+.img_hover:hover {
     transform: scale(1.1);
 }
 
@@ -148,7 +159,7 @@ footer > a > img {
 }
 
 /*for posts*/
-.show_posts {
+.show_profile_content {
     padding: 2em;
     padding-top: 4em;
     padding-bottom: 3em;
@@ -174,16 +185,29 @@ footer > a > img {
     margin-right: auto;
 }
 
-.posts_grid a img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-fit: cover;
-    transition: transform 0.2s;
+/*follows pages*/
+.follow_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 0));
 }
 
-.posts_grid a img:hover {
-    transform: scale(1.1);
+.follow {
+    margin: auto;
+    text-align: center;
+}
+
+.follow_grid .follow .name {
+    text-align: center;
+    margin: auto;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.follow_grid .follow p {
+    text-align: center;
+    margin: 0;
+    color:grey;
 }
 
 /*for single post*/
@@ -208,28 +232,23 @@ footer > a > img {
     margin-right: auto;
 }
 
-.post_caption .pfp a img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-fit: cover;
-    transition: transform 0.2s;
-}
-
-.post_caption .pfp a img:hover {
-    transform: scale(1.1);
-}
-
 .caption {
     margin-left: 1em;
 }
 
 .post_caption .caption a {
-    display: inline-block;
     text-decoration: none;
     color: black;
-    font-weight: bold;
     margin: 0;
+}
+
+.caption .post_name {
+    display: inline-block;
+    font-weight: bold;
+}
+
+.block_please {
+    display: block;
 }
 
 .caption span {
@@ -240,10 +259,27 @@ footer > a > img {
 .caption img {
     border-radius: 5px;
     max-width: 640px;
-    height: auto;
+    margin-right: 8px;
+}
+
+.caption p {
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
+.additional_comments {
+    color: gray;
+}
+
+.img_del {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
 .del {
+    margin-left: 4px;
+    width: 30px;
+    height: 30px;
     vertical-align: top;
     background-color: #4f4f4f;
     border-radius: 5px;
@@ -259,6 +295,55 @@ footer > a > img {
     width: auto;
     border-radius: 5px;
 }
+
+.post_and_comments {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+}
+
+.comments {
+    background-color: #ececec;
+    height: max(100%, 100vh);
+    padding: 12px;
+}
+
+.comments h2 {
+    margin-top: 3em;
+}
+
+.comment {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+}
+
+.comment_img_container {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.comment a {
+    text-decoration: none;
+    color: black;
+}
+
+.comment span {
+    color:grey;
+}
+
+.comment p {
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.comment .comment_text {
+    padding-left: 8px;
+}
+
 
 /*css for forms*/
 .forms {
@@ -297,4 +382,10 @@ footer > a > img {
 .forms .single_post {
     padding-top: 1em;
     padding-bottom: 2em;
+}
+
+
+/*for search page*/
+.search_prof_info {
+    color: gray;
 }
