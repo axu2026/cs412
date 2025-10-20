@@ -1,0 +1,26 @@
+<!--mini_insta/create_profile_form.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/20/25-->
+<!--Displays the form to create a profile.-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+    <div class="forms">
+        <h1>Create a profile</h1>
+    <!--the form tag set to post method-->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+        <!--the actual form that will be used to update the post-->
+            {{form2}}
+            {{form}}
+        <!--submit button-->
+            <br><br>
+            <input type="submit" value="Create" class="button">
+        <!--cancel button. it is an a tag disguised as a button-->
+            <a href="{% url 'show_all_profiles' %}">
+                <input type="button" value="Cancel" class="button">
+            </a>
+            <br><br><br>
+        </form>
+    </div>
+{% endblock %}

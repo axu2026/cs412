@@ -8,6 +8,9 @@ from django.views.generic import *
 from .models import *
 from .forms import *
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.contrib.auth import login
 
 # Create your views here.
 class ProfileListView(ListView):
@@ -374,3 +377,44 @@ class SearchView(LoginRequiredMixin, ListView):
             context['query'] = query
 
         return context
+    
+
+class LoggedOutView(TemplateView):
+    """log out confirmation view"""
+    template_name = "mini_insta/logged_out.html"
+
+
+class CreateProfileView(CreateView):
+    """view to show a form to create a profile"""
+
+    form_class = CreateProfileForm
+    template_name = "mini_insta/create_profile_form.html"
+
+    def get_context_data(self, **kwargs):
+        """override the context method"""
+
+        # get the original context
+        context = super().get_context_data(**kwargs)
+        form2 = UserCreationForm() # create an instance of the user form
+
+        # add user form to context to be displayed in the html
+        context['form2'] = form2
+
+        return context
+    
+    def form_valid(self, form):
+        """handle for submission to include the user"""
+
+        # create an instance of usercreationform with our inputs
+        user_form = UserCreationForm(self.request.POST)
+        user = user_form.save() # create the user from the form
+
+        # log in as the user
+        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+        # fill in the username field of the profile with user info
+        form.instance.username = self.request.POST['username']
+        form.instance.user = user
+
+        # delegate to superclass
+        return super().form_valid(form)

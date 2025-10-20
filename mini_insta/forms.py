@@ -22,6 +22,7 @@ class UpdateProfileForm(forms.ModelForm):
         model = Profile
         fields = ['profile_image_url', 'display_name', 'bio_text']
 
+
 class UpdatePostForm(forms.ModelForm):
     """The form to update a post"""
 
@@ -29,3 +30,12 @@ class UpdatePostForm(forms.ModelForm):
         """ties the form to the post model"""
         model = Post
         fields = ['caption']
+
+    
+class CreateProfileForm(forms.ModelForm):
+    """The form to create a new profile"""
+
+    class Meta:
+        """ties the form to the profile model"""
+        model = Profile
+        fields = ['display_name', 'bio_text', 'profile_image_url']

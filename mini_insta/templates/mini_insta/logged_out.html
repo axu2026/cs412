@@ -1,0 +1,15 @@
+<!--mini_insta/logged_out.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/20/25-->
+<!--confirmation for logging out of a user.-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+    <div class="forms">
+        <h1>Logged Out</h1>
+        <p>You have logged out.</p>
+        <a href="{% url 'login' %}">Log in</a> <br>
+        <a href="{% url 'create_profile' %}">Create a new profile</a> <br>
+        <a href="{% url 'show_all_profiles' %}">Return to home</a> <br>
+    </div>
+{% endblock %}
