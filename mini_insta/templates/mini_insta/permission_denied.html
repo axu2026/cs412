@@ -1,0 +1,17 @@
+<!--mini_insta/permission_denied.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/20/25-->
+<!--prevents a user from deleting a post they cant.-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+    <div class="show_profile_content">
+        <h1>PERMISSION DENIED</h1>
+        <p>
+            You do not have the right permissions to do this action.
+        </p>
+        <p>
+            Ensure you are on the correct account to do this.
+        </p>
+    </div>
+{% endblock %}

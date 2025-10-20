@@ -118,12 +118,24 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
         return context
         
 
-
 class DeletePostView(LoginRequiredMixin, DeleteView):
     """A view to prompt the user to delete a post"""
 
     template_name = "mini_insta/delete_post_form.html"
     model = Post
+
+    def dispatch(self, request, *args, **kwargs):
+        """override to check if the user has permission to do this action"""
+        pk = self.kwargs['pk']          # get the post pk
+        post = Post.objects.get(pk=pk)  # get the post
+
+        # check if there is currently a user, and if that user is/isnt the poster
+        if request.user.is_authenticated and request.user != post.profile.user:
+            # the user is not the poster, and is denied permission
+            return render(request, "mini_insta/permission_denied.html")
+
+        # send the delete page
+        return super().dispatch(request, *args, **kwargs)
 
     def get_login_url(self):
         """return url for login if not logged in"""
@@ -160,9 +172,22 @@ class UpdatePostView(LoginRequiredMixin, UpdateView):
     template_name = "mini_insta/update_post_form.html"
     model = Post
 
+    def dispatch(self, request, *args, **kwargs):
+        """override to check if the user has permission to do this action"""
+        pk = self.kwargs['pk']          # get the post pk
+        post = Post.objects.get(pk=pk)  # get the post
+
+        # check if there is currently a user, and if that user is/isnt the poster
+        if request.user.is_authenticated and request.user != post.profile.user:
+            # the user is not the poster, and is denied permission
+            return render(request, "mini_insta/permission_denied.html")
+
+        # send the delete page
+        return super().dispatch(request, *args, **kwargs)
+
     def get_login_url(self):
         """return url for login if not logged in"""
-        return super().get_login_url()
+        return reverse('login')
 
     def get_context_data(self):
         """specifies context variables for the post update view"""
@@ -202,9 +227,22 @@ class DeletePhotoView(LoginRequiredMixin, DeleteView):
     template_name = "mini_insta/delete_photo_form.html"
     model = Photo
 
+    def dispatch(self, request, *args, **kwargs):
+        """override to check if the user has permission to do this action"""
+        pk = self.kwargs['pk']            # get the photo pk
+        photo = Photo.objects.get(pk=pk)  # get the photo
+
+        # check if there is currently a user, and if that user is/isnt the poster
+        if request.user.is_authenticated and request.user != photo.post.profile.user:
+            # the user is not the poster, and is denied permission
+            return render(request, "mini_insta/permission_denied.html")
+
+        # send the delete page
+        return super().dispatch(request, *args, **kwargs)
+
     def get_login_url(self):
         """return url for login if not logged in"""
-        return super().get_login_url()
+        return reverse('login')
 
     def get_context_data(self, **kwargs):
         """override for the context data"""
@@ -285,7 +323,7 @@ class SearchView(LoginRequiredMixin, ListView):
         """override the superclass dispatch method"""
 
         # if there is no query made yet, send the search form
-        if not 'query' in self.request.GET:
+        if not 'query' in self.request.GET and request.user.is_authenticated:
             # find profile of the user making search and put it into context
             user = self.request.user
             profile = Profile.objects.get(user=user)
@@ -294,7 +332,7 @@ class SearchView(LoginRequiredMixin, ListView):
             }
             return render(request, "mini_insta/search.html", context)
 
-        # else show the results of query
+        # else show the results of query (or log in screen)
         return super().dispatch(request, *args, **kwargs)
     
     def get_queryset(self):

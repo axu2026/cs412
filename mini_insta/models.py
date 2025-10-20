@@ -24,7 +24,7 @@ class Profile(models.Model):
     bio_text = models.TextField(blank=True)
 
     # the time when the account was made displayed in detailed view
-    join_date = models.DateTimeField(auto_now=True)
+    join_date = models.DateTimeField(auto_now_add=True)
 
     # associates a user to a profile
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -104,7 +104,7 @@ class Post(models.Model):
     caption = models.TextField(blank=True)
 
     # the date that the post was created on
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         """the string representation of the post"""
@@ -229,7 +229,7 @@ class Photo(models.Model):
     image_url = models.URLField(blank=True)
 
     # the date the photo was uploaded to the site
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     # new image file field
     image_file = models.ImageField(blank=True)
@@ -274,7 +274,7 @@ class Follow(models.Model):
                                 related_name="profile")
     
     # the date when follower started following
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         """return the string representation of the follow"""
@@ -291,7 +291,7 @@ class Comment(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     # the time the comment was created
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     # the text field for the comment
     text = models.TextField(blank=True)
@@ -311,7 +311,7 @@ class Like(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     # the time the like was created
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         """string representation of the like"""
