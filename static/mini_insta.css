@@ -12,21 +12,43 @@ body {
 
 /*header css*/
 header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    color: white;
     font-family: 'Segoe UI', sans-serif;
     position: fixed;
     background-color: #62d7bc;
     width: 100%;
     z-index: 100;
     text-align: center;
+    font-weight: bold;
 }
 
 header a {
     text-decoration: none;
     color: white;
+    display: inline-block;
+    width: fit-content;
+    margin: auto;
 }
 
 header a h1 {
-    margin: 12px;
+    margin: 6px;
+    display: inline-block;
+}
+
+.header_info {
+    margin-left: 2em;
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: left;
+    display: inline-block;
+}
+
+.log_in_out {
+    margin-right: 2em;
+    margin-left: auto;
+    display: inline-block;
 }
 
 
@@ -57,6 +79,31 @@ footer {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 3px;
+}
+
+
+/*log in and out stuff*/
+.log_out {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    display: table;
+    max-width: 62px;
+}
+
+.not_button {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    margin-right: 2em;
+    margin-left: auto;
+    padding: 0;
+    font-size: 16px;
+}
+
+.not_button:hover{
+    cursor: pointer;
 }
 
 

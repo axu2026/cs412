@@ -13,7 +13,23 @@
     <body>
     <!--header-->
         <header>
+        <!--check if there is a user currently logged in and display info-->
+            {% if request.user.is_authenticated %}
+                <span class="header_info">Logged in as: {{request.user}}</span>
+            {% else %}
+                <span class="header_info">Not logged in</span>
+            {% endif %}
+        <!--logo and button back to profile view-->
             <a href="{% url 'show_all_profiles' %}"><h1>mini insta™</h1></a>
+        <!--log in and log out button-->
+            {% if request.user.is_authenticated %}
+                <form action="{% url 'logout' %}" method="POST" class="log_out">
+                    {% csrf_token %}
+                    <input type="submit" value="Log Out" class="not_button">
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="log_in_out">Log In</a>
+            {% endif %}
         </header>
     <!--main content-->
         {% block content %}
@@ -21,41 +37,48 @@
     <!--footer-->
         <footer>
         <!--conditionals to see which operations to display-->
-        <!--check for profile on the page, then allow post creation/updating-->
-            {% if profile %}
-                <a href="{% url 'show_profile' profile.pk %}" class="profile_home">
-                    <img src="{{profile.profile_image_url}}" alt = "home" class="img_hover">
-                </a>
-            <!--bring back to feed-->
-                <a href="{% url 'show_feed' profile.pk %}">
-                    <img src="{% static 'home.webp' %}" alt = "feed" class="opt">
-                </a>
-            <!--search bar-->
-                <a href="{% url 'search' profile.pk %}">
-                    <img src="{% static 'search.png' %}" alt = "search" class="opt">
-                </a>
-            <!--create a post-->
-                <a href="{% url 'create_post' profile.pk %}">
-                    <img src="{% static 'plus.png' %}" alt = "post" class="opt">
-                </a>
-            <!--update a profile-->
-                <a href="{% url 'update_profile' profile.pk %}">
-                    <img src="{% static 'edit.webp' %}" alt = "update" class="opt">
-                </a>
-        <!--check for a post on the page, then make respective buttons-->
-            {% elif post %}
+        <!--if there is a post, add a button to go back-->
+            {% if post %}
             <!--go back to profile-->
                 <a href="{% url 'show_profile' post.profile.pk %}">
                     <img src="{% static 'back.webp' %}" alt = "back" class="opt">
                 </a>
-            <!--delete a post-->
-                <a href="{% url 'delete_post' post.pk %}">
-                    <img src="{% static 'delete.png' %}" alt = "delete" class="opt">
+            {% endif %}
+        <!--check for profile on the page, then allow post creation/updating-->
+            {% if request.user.is_authenticated %}
+            <!--check if there is a profile to display-->
+                {% if profile and profile.user == request.user %}
+                    <a href="{% url 'show_profile' profile.pk %}" class="profile_home">
+                        <img src="{{profile.profile_image_url}}" alt = "home" class="img_hover">
+                    </a>
+                {% endif %}
+            <!--bring back to feed-->
+                <a href="{% url 'show_feed' %}">
+                    <img src="{% static 'home.webp' %}" alt = "feed" class="opt">
                 </a>
-            <!--update a post-->
-                <a href="{% url 'update_post' post.pk %}">
-                    <img src="{% static 'edit.webp' %}" alt = "update" class="opt">
+            <!--search bar-->
+                <a href="{% url 'search' %}">
+                    <img src="{% static 'search.png' %}" alt = "search" class="opt">
                 </a>
+            <!--create a post-->
+                <a href="{% url 'create_post' %}">
+                    <img src="{% static 'plus.png' %}" alt = "post" class="opt">
+                </a>
+            <!--update a profile-->
+                <a href="{% url 'update_profile' %}">
+                    <img src="{% static 'user.png' %}" alt = "update" class="opt">
+                </a>
+            <!--check if the user is looking at their own post to update/delete-->
+                {% if post and post.profile.user == request.user %}
+                <!--delete a post-->
+                    <a href="{% url 'delete_post' post.pk %}">
+                        <img src="{% static 'delete.png' %}" alt = "delete" class="opt">
+                    </a>
+                <!--update a post-->
+                    <a href="{% url 'update_post' post.pk %}">
+                        <img src="{% static 'edit.webp' %}" alt = "update" class="opt">
+                    </a>
+                {% endif %}
             {% endif %}
         </footer>
     </body>

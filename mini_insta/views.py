@@ -7,6 +7,7 @@ from django.http import HttpRequest, HttpResponse
 from django.views.generic import *
 from .models import *
 from .forms import *
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 class ProfileListView(ListView):
@@ -33,22 +34,28 @@ class PostDetailView(DetailView):
     context_object_name = "post" # single post
 
 
-class CreatePostView(CreateView):
+class CreatePostView(LoginRequiredMixin, CreateView):
     """A view to allow creation of a post with a form"""
 
     form_class = CreatePostForm
     template_name = "mini_insta/create_post_form.html"
 
+    def get_login_url(self):
+        """return the log in url for when a non-user tries to create a post"""
+        return reverse('login')
+    
+    def get_object(self, queryset=None):
+        """return the right profile object according to the current user"""
+        return Profile.objects.get(user=self.request.user)
+
     def get_context_data(self):
         """specifies context variables for the post create view"""
 
-        # find the key of the profile, get the profile, then add it to the form
+        # get the context
         context = super().get_context_data()
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
 
-        # add that profile to the context
-        context['profile'] = profile
+        # add that profile to the context using get_object()
+        context['profile'] = self.get_object()
 
         return context
 
@@ -64,10 +71,8 @@ class CreatePostView(CreateView):
     def form_valid(self, form):
         """Handles form submission, used to add foreign key to the post"""
 
-        # find the key of the profile, get the profile, then add it to the form
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
-        form.instance.profile = profile
+        # fill in the profile field of the form
+        form.instance.profile = self.get_object()
 
         # save the post for creation of the image
         self.object = form.save()
@@ -85,19 +90,44 @@ class CreatePostView(CreateView):
         return super().form_valid(form)
 
 
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
     """A view to update a profile with a form"""
 
     form_class = UpdateProfileForm
     template_name = "mini_insta/update_profile_form.html"
     model = Profile
 
+    def get_login_url(self):
+        """return url for login if not logged in"""
+        return reverse('login')
+    
+    def get_object(self, queryset = None):
+        """return the right profile object according to the current user"""
+        return Profile.objects.get(user=self.request.user)
 
-class DeletePostView(DeleteView):
+    def get_context_data(self, **kwargs):
+        """change context to include profile"""
+        
+        context = super().get_context_data(**kwargs)
+
+        user = self.request.user                 # get the user
+        profile = Profile.objects.get(user=user) # find profile of the user
+
+        context['profile'] = profile
+
+        return context
+        
+
+
+class DeletePostView(LoginRequiredMixin, DeleteView):
     """A view to prompt the user to delete a post"""
 
     template_name = "mini_insta/delete_post_form.html"
     model = Post
+
+    def get_login_url(self):
+        """return url for login if not logged in"""
+        return reverse('login')
 
     def get_success_url(self):
         """return url back to the profile that the delete post came from"""
@@ -123,12 +153,16 @@ class DeletePostView(DeleteView):
         return context
 
 
-class UpdatePostView(UpdateView):
+class UpdatePostView(LoginRequiredMixin, UpdateView):
     """A view to update a post"""
 
     form_class = UpdatePostForm
     template_name = "mini_insta/update_post_form.html"
     model = Post
+
+    def get_login_url(self):
+        """return url for login if not logged in"""
+        return super().get_login_url()
 
     def get_context_data(self):
         """specifies context variables for the post update view"""
@@ -162,11 +196,15 @@ class UpdatePostView(UpdateView):
         return super().form_valid(form)
     
 
-class DeletePhotoView(DeleteView):
-    """View to confirm delettion of a photo"""
+class DeletePhotoView(LoginRequiredMixin, DeleteView):
+    """View to confirm deletion of a photo"""
 
     template_name = "mini_insta/delete_photo_form.html"
     model = Photo
+
+    def get_login_url(self):
+        """return url for login if not logged in"""
+        return super().get_login_url()
 
     def get_context_data(self, **kwargs):
         """override for the context data"""
@@ -206,20 +244,27 @@ class ShowFollowingDetailView(DetailView):
     context_object_name = "profile"
 
 
-class PostFeedListView(ListView):
+class PostFeedListView(LoginRequiredMixin, ListView):
     """view showing all posts for a user's feed"""
 
     model = Post
     template_name = "mini_insta/show_feed.html"
     context_object_name = "posts" # all posts
 
+    def get_login_url(self):
+        """return url for login if not logged in"""
+        return reverse('login')
+
+    def get_object(self, queryset=None):
+        """return the right profile object according to the current user"""
+        return Profile.objects.get(user=self.request.user)
+
     def get_context_data(self):
         """specifies context variables for feed"""
 
-        # find the key of the profile and get it
+        # find the profile object and aff to context
         context = super().get_context_data()
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
+        profile = self.get_object()
 
         # add that profile to the context
         context['profile'] = profile
@@ -227,10 +272,14 @@ class PostFeedListView(ListView):
         return context
     
 
-class SearchView(ListView):
+class SearchView(LoginRequiredMixin, ListView):
     """view that gives the user a search bar to find posts/profiles"""
 
     template_name = "mini_insta/search_results.html"
+
+    def get_login_url(self):
+        """return url for login if not logged in"""
+        return reverse('login')
 
     def dispatch(self, request, *args, **kwargs):
         """override the superclass dispatch method"""
@@ -238,8 +287,8 @@ class SearchView(ListView):
         # if there is no query made yet, send the search form
         if not 'query' in self.request.GET:
             # find profile of the user making search and put it into context
-            pk = self.kwargs['pk']
-            profile = Profile.objects.get(pk=pk)
+            user = self.request.user
+            profile = Profile.objects.get(user=user)
             context = {
                 "profile": profile,
             }
@@ -260,10 +309,10 @@ class SearchView(ListView):
     def get_context_data(self, **kwargs):
         """specifies context variables for search"""
 
-        # find the key of the profile and get it
+        # get user, then find profile with the user
         context = super().get_context_data(**kwargs)
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
 
         # add that profile that is searching to the context
         context['profile'] = profile

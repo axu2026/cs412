@@ -27,9 +27,12 @@
                     {% for photo in post.get_all_photos %}
                         <div class="img_del">
                             <img src="{{photo.get_image_url}}" alt="photo">
-                            <a href="{% url 'delete_photo' photo.pk %}" class="del">
-                                <img src="{% static 'delete.png' %}" alt="delete">
-                            </a>
+                        <!--check if the current user is the poster to see if we can delete img-->
+                            {% if request.user == post.profile.user %}
+                                <a href="{% url 'delete_photo' photo.pk %}" class="del">
+                                    <img src="{% static 'delete.png' %}" alt="delete">
+                                </a>
+                            {% endif %}
                         </div>
                         <hr>
                     {% endfor %}

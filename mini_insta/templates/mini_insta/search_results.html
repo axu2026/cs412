@@ -20,7 +20,7 @@
                     <a href="{% url 'show_profile' p.pk %}" class="post_name">
                         {{p.display_name}}
                     </a>
-                    <span>{{p.username}}</span>
+                    <span>@{{p.username}}</span>
                     <p class="search_prof_info">Joined on {{p.join_date}} • 
                         {{p.get_num_followers}} followers • 
                         {{p.get_posts_count}} posts
