@@ -330,6 +330,11 @@ footer {
     vertical-align: top;
     background-color: #4f4f4f;
     border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.del:hover{
+    background-color: #62d7bc;
 }
 
 .del img {
@@ -408,7 +413,7 @@ footer {
 }
 
 .forms .button {
-    width: 100px;
+    width: 120px;
     height: 50px;
     font-size: 24;
     border-radius: 5px;
@@ -435,4 +440,30 @@ footer {
 /*for search page*/
 .search_prof_info {
     color: gray;
+}
+
+
+/*for likes*/
+.likes {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: max-content 32px;
+}
+
+.likes span {
+    width: auto;
+}
+
+.liked {
+    margin-left: 4px;
+    width: 30px;
+    height: 30px;
+    vertical-align: top;
+    background-color: #62d7bc;
+    border-radius: 5px;
+}
+
+.liked img {
+    width: 30px;
+    height: 30px;
 }

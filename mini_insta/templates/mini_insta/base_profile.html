@@ -49,6 +49,19 @@
                         </td>
                     </tr>
                 </table>
+            <!--button for follow/unfollow-->
+            <!--check for a user and if that user is not looking at their own page-->
+                {% if request.user.is_authenticated and request.user != profile.user %}
+                    {% if already_followed %}
+                        <a href="{% url 'delete_follow' profile.pk %}" class="forms">
+                            <input type="button" value="Unfollow" class="button">
+                        </a>
+                    {% else %}
+                        <a href="{% url 'create_follow' profile.pk %}" class="forms">
+                            <input type="button" value="Follow" class="button">
+                        </a>
+                    {% endif %}
+                {% endif %}
             </div>
         </div>
     <!--actual content-->

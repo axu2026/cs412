@@ -36,7 +36,17 @@
                         </div>
                         <hr>
                     {% endfor %}
-                    <p>{{post.get_like_count}} {{post.get_example_likers}}</p>
+                <!--likes info and button-->
+                    <div class="likes">
+                        <span>{{post.get_like_count}} {{post.get_example_likers}}</span>
+                    <!--check if the user viewing is the poster, hide the like-->
+                        {% if request.user != post.profile.user %}
+                        <!--need to check if already liked, change color if so-->
+                            <a href="" class="{% if liked %} liked {% else %} del {% endif %}">
+                                <img src="{% static 'like.png' %}" alt="delete">
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

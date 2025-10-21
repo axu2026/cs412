@@ -26,7 +26,26 @@ class ProfileDetailView(DetailView):
 
     model = Profile
     template_name = "mini_insta/show_profile.html"
-    context_object_name = "profile" # single profile
+
+    def get_context_data(self, **kwargs):
+        """override the context data for dealing with follow button"""
+        context = super().get_context_data(**kwargs)
+
+        # get the profile and add it to the context
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        context['profile'] = profile
+
+        # if there is a user, check if there is already a follow
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            user_profile = Profile.objects.get(user=user)
+            context['already_followed'] = Follow.objects.filter(follower_profile=user_profile,
+                                                            profile=profile)
+        else:
+            context['already_followed'] = None # otherwise there is no follow
+
+        return context
 
 
 class PostDetailView(DetailView):
@@ -34,7 +53,25 @@ class PostDetailView(DetailView):
 
     model = Post
     template_name = "mini_insta/show_post.html"
-    context_object_name = "post" # single post
+
+    def get_context_data(self, **kwargs):
+        """specifies context variables for the post detail view"""
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        post = Post.objects.get(pk=pk)
+        context['post'] = post
+
+        # check for user, if there is one, then there may already be a like
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            user_profile = Profile.objects.get(user=user)
+            like = Like.objects.filter(post=post, profile=user_profile)
+
+            context['liked'] = like
+        else:
+            context['liked'] = None
+
+        return context
 
 
 class CreatePostView(LoginRequiredMixin, CreateView):
@@ -276,6 +313,26 @@ class ShowFollowersDetailView(DetailView):
     template_name = "mini_insta/show_followers.html"
     context_object_name = "profile"
 
+    def get_context_data(self, **kwargs):
+        """override the context data for dealing with follow button"""
+        context = super().get_context_data(**kwargs)
+
+        # get the profile and add it to the context
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        context['profile'] = profile
+
+        # if there is a user, check if there is already a follow
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            user_profile = Profile.objects.get(user=user)
+            context['already_followed'] = Follow.objects.filter(follower_profile=user_profile,
+                                                            profile=profile)
+        else:
+            context['already_followed'] = None # otherwise there is no follow
+
+        return context
+
 
 class ShowFollowingDetailView(DetailView):
     """view showing all a profile's follows"""
@@ -283,6 +340,26 @@ class ShowFollowingDetailView(DetailView):
     model = Profile
     template_name = "mini_insta/show_following.html"
     context_object_name = "profile"
+
+    def get_context_data(self, **kwargs):
+        """override the context data for dealing with follow button"""
+        context = super().get_context_data(**kwargs)
+
+        # get the profile and add it to the context
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        context['profile'] = profile
+
+        # if there is a user, check if there is already a follow
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            user_profile = Profile.objects.get(user=user)
+            context['already_followed'] = Follow.objects.filter(follower_profile=user_profile,
+                                                            profile=profile)
+        else:
+            context['already_followed'] = None # otherwise there is no follow
+
+        return context
 
 
 class PostFeedListView(LoginRequiredMixin, ListView):
@@ -418,3 +495,89 @@ class CreateProfileView(CreateView):
 
         # delegate to superclass
         return super().form_valid(form)
+    
+
+class CreateFollowView(LoginRequiredMixin, CreateView):
+    """the view to ask a user if they want to follow a profile"""
+
+    form_class = CreateFollowForm
+    template_name = "mini_insta/create_follow.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        """override to check if the user has permission to do this action"""
+        pk = self.kwargs['pk']                # get the profile pk
+        profile = Profile.objects.get(pk=pk)  # get the profile
+
+        # check if there is currently a user, and if that user is the profile
+        if request.user.is_authenticated and request.user == profile.user:
+            # the user is not allowed to follow themselves
+            return render(request, "mini_insta/permission_denied.html")
+
+        # else send the page normally
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_login_url(self):
+        """return url for login if not logged in"""
+        return reverse('login')
+
+    def get_context_data(self, **kwargs):
+        """add the profile the user is trying to follow into context"""
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+
+        context['profile'] = profile
+
+        return context
+    
+    def form_valid(self, form):
+        """create the follow by finding user and profile"""
+        user = self.request.user    # find user and the profile of user
+        follower_profile = Profile.objects.get(user=user)
+        pk = self.kwargs['pk']      # find followee profile
+        profile = Profile.objects.get(pk=pk)
+
+        # add them to form to make the follow
+        form.instance.follower_profile = follower_profile
+        form.instance.profile = profile
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        """after following, send back to their profile page"""
+        return reverse('show_profile', kwargs={'pk':self.kwargs['pk']})
+
+
+class DeleteFollowView(LoginRequiredMixin, DeleteView):
+    """the view to ask a user if they want to stop following a profile"""
+
+    template_name = "mini_insta/delete_follow.html"
+    model = Follow
+
+    def get_login_url(self):
+        """return url for login if not logged in"""
+        return reverse('login')
+
+    def get_object(self, queryset = None):
+        """find the object to be deleted"""
+        user = self.request.user    # find the user
+        user_profile = Profile.objects.get(user=user)
+        pk = self.kwargs['pk']      # find the profile
+        profile = Profile.objects.get(pk=pk)
+        
+        # use the user and profile to find the follow
+        return Follow.objects.get(follower_profile=user_profile, profile=profile)
+
+    def get_context_data(self, **kwargs):
+        """add the profile the user is trying to remove into context"""
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+
+        context['profile'] = profile
+
+        return context
+    
+    def get_success_url(self):
+        """redirect to profile after unfollowing"""
+        return reverse('show_profile', kwargs={'pk':self.kwargs['pk']})

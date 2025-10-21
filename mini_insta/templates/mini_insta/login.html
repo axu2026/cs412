@@ -6,15 +6,19 @@
 
 {% block content %}
     <div class="forms">
+    <!--form tag to post-->
         <form action="{% url 'login' %}" method="POST">
             <h1>Log In</h1>
             {% csrf_token %}
+        <!--display the form-->
             {{form}}
             <br>
+        <!--submit and cancel buttons-->
             <input type="submit" value="Log In" class="button">
             <a href="{% url 'show_all_profiles' %}">
                 <input type="button" value="Cancel" class="button">
             </a>
+        <!--this checks where to redirect to after submitting-->
             {% if request.GET.next %}
                 <input type="hidden" name="next" value="{{request.GET.next}}">
             {% else %}
@@ -22,6 +26,7 @@
             {% endif %}
         </form>
         <br><br>
+    <!--for when a user wants to create a profile-->
         <a href="{% url 'create_profile' %}">Create a new profile</a>
     </div>
 {% endblock %}

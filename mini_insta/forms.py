@@ -39,3 +39,9 @@ class CreateProfileForm(forms.ModelForm):
         """ties the form to the profile model"""
         model = Profile
         fields = ['display_name', 'bio_text', 'profile_image_url']
+
+
+class CreateFollowForm(forms.ModelForm):
+    class Meta:
+        model = Follow
+        fields = []
