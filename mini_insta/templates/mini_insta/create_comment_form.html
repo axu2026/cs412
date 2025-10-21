@@ -30,7 +30,7 @@
             {% csrf_token %}
         <!--the actual form that will be used to create the post-->
             {{form}}
-            <br>
+            <br><br>
             <input type="submit" value="Submit" class="button">
         <!--cancel button. it is an a tag disguised as a button-->
             <a href="{% url 'show_post' post.pk %}">
