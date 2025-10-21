@@ -1,0 +1,41 @@
+<!--mini_insta/create_comment_form.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/21/25-->
+<!--Displays the form to be used when creating a comment.-->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+    <div class="forms">
+        <h1>Creating a comment for a post by @{{post.profile}}</h1>
+        <div class="single_post">
+        <!--displays profile picture, names, caption, timestamp, and photos-->
+            <div class="post_caption">
+                <div class="pfp">
+                    <a href="{% url 'show_profile' post.profile.pk %}">
+                        <img src="{{post.profile.profile_image_url}}" alt="pfp" class="img_hover">
+                    </a>
+                </div>
+            <!--all the actual content of a post here-->
+                <div class="caption">
+                    <a href="{% url 'show_profile' post.profile.pk %}">
+                        {{post.profile.display_name}}
+                    </a>
+                    <span>@{{post.profile.username}} on {{post.timestamp}}</span>
+                    <p>{{post.caption}}</p>
+                </div>
+            </div>
+        </div>
+    <!--the form tag set to post method-->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+        <!--the actual form that will be used to create the post-->
+            {{form}}
+            <br>
+            <input type="submit" value="Submit" class="button">
+        <!--cancel button. it is an a tag disguised as a button-->
+            <a href="{% url 'show_post' post.pk %}">
+                <input type="button" value="Cancel" class="button">
+            </a>
+        </form>
+    </div>
+{% endblock %}

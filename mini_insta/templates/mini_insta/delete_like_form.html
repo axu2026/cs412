@@ -8,8 +8,29 @@
 {% block content %}
     <div class="forms">
         <form method="POST">
+        <!--post information-->
             {% csrf_token %}
-            <h1>Unlike {{post}}?</h1>
+            <h1>Unlike post by @{{post.profile}}?</h1>
+            <div class="single_post">
+            <!--displays profile picture, names, caption, timestamp-->
+                <div class="post_caption">
+                    <div class="pfp">
+                        <a href="{% url 'show_profile' post.profile.pk %}">
+                            <img src="{{post.profile.profile_image_url}}" alt="pfp" class="img_hover">
+                        </a>
+                    </div>
+                <!--all the actual content of a post here-->
+                    <div class="caption">
+                        <a href="{% url 'show_profile' post.profile.pk %}">
+                            {{post.profile.display_name}}
+                        </a>
+                        <span>@{{post.profile.username}} on {{post.timestamp}}</span>
+                        <p>{{post.caption}}</p>
+                    </div>
+                </div>
+            </div>
+        <!--submit and cancel buttons-->
+            <br>
             <input type="submit" value="Yes" class="button">
             <a href="{% url 'show_post' post.pk %}">
                 <input type="button" value="No" class="button">

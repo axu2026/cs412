@@ -75,6 +75,9 @@
                 </div>
                 <hr>
             {% endfor %}
+            <a href="{% url 'create_comment' post.pk %}">
+                Add a comment
+            </a>
         </div>
     </div>
 {% endblock %}

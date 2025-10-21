@@ -9,7 +9,27 @@
     <div class="forms">
         <form method="POST">
             {% csrf_token %}
-            <h1>Follow {{profile}}?</h1>
+        <!--show profile information-->
+            <h1>Follow @{{profile}}?</h1>
+            <div class="post_caption">
+                <div class="pfp">
+                    <a href="{% url 'show_profile' profile.pk %}">
+                        <img src="{{profile.profile_image_url}}" alt="pfp" class="img_hover">
+                    </a>
+                </div>
+                <div class="caption">
+                    <a href="{% url 'show_profile' profile.pk %}" class="post_name">
+                        {{profile.display_name}}
+                    </a>
+                    <span>@{{profile.username}}</span>
+                    <p class="search_prof_info">Joined on {{profile.join_date}} • 
+                        {{profile.get_num_followers}} followers • 
+                        {{profile.get_posts_count}} posts
+                    </p>
+                </div>
+            </div>
+        <!--submit and cancel buttons-->
+            <br>
             <input type="submit" value="Yes" class="button">
             <a href="{% url 'show_profile' profile.pk %}">
                 <input type="button" value="No" class="button">

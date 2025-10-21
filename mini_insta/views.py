@@ -683,3 +683,42 @@ class DeleteLikeView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         """redirect to post after unliking"""
         return reverse('show_post', kwargs={'pk':self.kwargs['pk']})
+    
+
+class CreateCommentView(LoginRequiredMixin, CreateView):
+    """the view to create a comment on a post"""
+
+    model = Comment
+    form_class = CreateCommentForm
+    template_name = "mini_insta/create_comment_form.html"
+
+    def get_login_url(self):
+        """return url for login if not logged in"""
+        return reverse('login')
+
+    def get_context_data(self, **kwargs):
+        """add the post the user is trying to comment on into context"""
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        post = Post.objects.get(pk=pk)
+
+        context['post'] = post
+
+        return context
+    
+    def form_valid(self, form):
+        """create the comment by finding profile and post"""
+        user = self.request.user    # find user and the profile of user
+        user_profile = Profile.objects.get(user=user)
+        pk = self.kwargs['pk']      # find the post with pk
+        post = Post.objects.get(pk=pk)
+
+        # add them to form to make the comment
+        form.instance.post = post
+        form.instance.profile = user_profile
+
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        """return to the show_post view after making a comment"""
+        return reverse('show_post', kwargs={'pk':self.kwargs['pk']})

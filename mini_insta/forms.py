@@ -57,3 +57,12 @@ class CreateLikeForm(forms.ModelForm):
         """No fields, we will assign frields programatically"""
         model = Like
         fields = []
+
+
+class CreateCommentForm(forms.ModelForm):
+    """A form to create a comment on a post"""
+
+    class Meta:
+        """link the fields to the comment model"""
+        model = Comment
+        fields = ['text']
