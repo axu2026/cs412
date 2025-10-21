@@ -42,6 +42,18 @@ class CreateProfileForm(forms.ModelForm):
 
 
 class CreateFollowForm(forms.ModelForm):
+    """A form, but not really, used to make a follow"""
+
     class Meta:
+        """No fields, we will assign frields programatically"""
         model = Follow
+        fields = []
+
+
+class CreateLikeForm(forms.ModelForm):
+    """A form, but not really, used to make a like"""
+
+    class Meta:
+        """No fields, we will assign frields programatically"""
+        model = Like
         fields = []

@@ -54,3 +54,37 @@ class ReplyCreateView(CreateView):
     def get_success_url(self):
         pk = self.kwargs['pk']
         return reverse('comment', kwargs={'pk':pk})
+    
+class CommentUpdateView(UpdateView):
+    """update a comment"""
+
+    model = Comment
+    form_class = UpdateCommentForm
+    template_name = "hw/update_comment.html"
+
+class ReplyUpdateView(UpdateView):
+    model = Reply
+    form_class = UpdateReplyForm
+    template_name = "hw/update_reply.html"
+
+    def get_success_url(self):
+        reply = Reply.objects.get(pk=self.kwargs['pk'])
+        return reverse('comment', kwargs={'pk':reply.comment.pk})
+    
+class CommentDeleteView(DeleteView):
+    model = Comment
+    template_name = "hw/delete_comment.html"
+
+    def get_success_url(self):
+        return reverse('home')
+    
+class ReplyDeleteView(DeleteView):
+    model = Reply
+    template_name = "hw/delete_reply.html"
+
+    def get_success_url(self):
+        pk = self.kwargs['pk']
+        reply = Reply.objects.get(pk=pk)
+        comment = reply.comment
+
+        return reverse('comment', kwargs={'pk': comment.pk})

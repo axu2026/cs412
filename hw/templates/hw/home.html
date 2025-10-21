@@ -5,10 +5,16 @@
         <link rel="stylesheet" href="{% static 'styles.css' %}">
     </head>
     <body>
-        <h1>welcome to hello world app. this is currently being used to practice for quiz 2</h1>
+        <h1>welcome to hello world app. this is currently being used to practice for quiz 3</h1>
         {% for comment in comments %}
             <a href="{% url 'comment' comment.pk %}"><h3>{{comment.username}} at {{comment.timestamp}}</h3></a>
             <p>{{comment.text}}</p>
+            {% if comment.image_url %}
+                <img src="{{comment.image_url}}" alt="photo">
+            {% endif %}
+            {% if comment.image_file %}
+                <img src="{{comment.image_file.url}}" alt="photo">
+            {% endif %}
             <hr>
         {% endfor %}
         <a href="{% url 'create' %}">create a comment</a>

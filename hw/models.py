@@ -8,6 +8,8 @@ class Comment(models.Model):
     username = models.TextField(blank=True)
     text = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now=True)
+    image_url = models.URLField(blank=True)
+    image_file = models.ImageField(blank=True)
 
     def __str__(self):
         return f'{self.username} at {self.timestamp}'
@@ -27,6 +29,8 @@ class Reply(models.Model):
     username = models.TextField(blank=True)
     text = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now=True)
+    image_url = models.URLField(blank=True)
+    image_file = models.ImageField(blank=True)
 
     def __str__(self):
         return f'{self.username} at {self.timestamp}'

@@ -501,17 +501,25 @@ class CreateFollowView(LoginRequiredMixin, CreateView):
     """the view to ask a user if they want to follow a profile"""
 
     form_class = CreateFollowForm
-    template_name = "mini_insta/create_follow.html"
+    template_name = "mini_insta/create_follow_form.html"
 
     def dispatch(self, request, *args, **kwargs):
         """override to check if the user has permission to do this action"""
         pk = self.kwargs['pk']                # get the profile pk
         profile = Profile.objects.get(pk=pk)  # get the profile
 
-        # check if there is currently a user, and if that user is the profile
-        if request.user.is_authenticated and request.user == profile.user:
+        # check if there is currently a user
+        if request.user.is_authenticated:
             # the user is not allowed to follow themselves
-            return render(request, "mini_insta/permission_denied.html")
+            if request.user == profile.user:
+                return render(request, "mini_insta/permission_denied.html")
+            
+            user_profile = Profile.objects.get(user=request.user)
+
+            # prevent the user from following the same profile again
+            if Follow.objects.filter(follower_profile=user_profile,
+                                     profile=profile):
+                return render(request, "mini_insta/permission_denied.html")
 
         # else send the page normally
         return super().dispatch(request, *args, **kwargs)
@@ -551,7 +559,7 @@ class CreateFollowView(LoginRequiredMixin, CreateView):
 class DeleteFollowView(LoginRequiredMixin, DeleteView):
     """the view to ask a user if they want to stop following a profile"""
 
-    template_name = "mini_insta/delete_follow.html"
+    template_name = "mini_insta/delete_follow_form.html"
     model = Follow
 
     def get_login_url(self):
@@ -581,3 +589,97 @@ class DeleteFollowView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         """redirect to profile after unfollowing"""
         return reverse('show_profile', kwargs={'pk':self.kwargs['pk']})
+    
+
+class CreateLikeView(LoginRequiredMixin, CreateView):
+    """the view to ask the user if they want to like a post"""
+
+    form_class = CreateLikeForm
+    template_name = "mini_insta/create_like_form.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        """override to check if the user has permission to do this action"""
+        pk = self.kwargs['pk']                # get the post pk
+        post = Post.objects.get(pk=pk)  # get the post
+
+        # check if there is currently a user
+        if request.user.is_authenticated:
+            # the user is not allowed to like their own post
+            if request.user == post.profile.user:
+                return render(request, "mini_insta/permission_denied.html")
+            
+            user_profile = Profile.objects.get(user=request.user)
+
+            # prevent the user from liking the same post again
+            if Like.objects.filter(post=post,
+                                   profile=user_profile):
+                return render(request, "mini_insta/permission_denied.html")
+
+        # else send the page normally
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_login_url(self):
+        """return url for login if not logged in"""
+        return reverse('login')
+    
+    def get_context_data(self, **kwargs):
+        """add the post the user is trying to like into context"""
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        post = Post.objects.get(pk=pk)
+
+        context['post'] = post
+
+        return context
+    
+    def form_valid(self, form):
+        """create the like by finding post and profile"""
+        user = self.request.user    # find user and the profile of user
+        user_profile = Profile.objects.get(user=user)
+        pk = self.kwargs['pk']      # find the post with pk
+        post = Post.objects.get(pk=pk)
+
+        # add them to form to make the like
+        form.instance.post = post
+        form.instance.profile = user_profile
+
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        """after liking, send back to post page"""
+        return reverse('show_post', kwargs={'pk':self.kwargs['pk']})
+    
+
+class DeleteLikeView(LoginRequiredMixin, DeleteView):
+    """view to delete a like"""
+
+    template_name = "mini_insta/delete_like_form.html"
+    model = Like
+
+    def get_login_url(self):
+        """return url for login if not logged in"""
+        return reverse('login')
+    
+    def get_object(self, queryset = None):
+        """find the object to be deleted"""
+        user = self.request.user    # find the user
+        user_profile = Profile.objects.get(user=user)
+        pk = self.kwargs['pk']      # find the profile
+        post = Post.objects.get(pk=pk)
+        
+        # use the user and post to find the like
+        return Like.objects.get(post=post, profile=user_profile)
+    
+    def get_context_data(self, **kwargs):
+        """add the post the user is trying to remove like into context"""
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs['pk']
+        post = Post.objects.get(pk=pk)
+
+        context['post'] = post
+
+        return context
+    
+    def get_success_url(self):
+        """redirect to post after unliking"""
+        return reverse('show_post', kwargs={'pk':self.kwargs['pk']})

@@ -6,12 +6,29 @@
     </head>
     <body>
         <a href="{% url 'home' %}">go back</a>
+        <a href="{% url 'update_comment' comment.pk %}">update comment</a>
+        <a href="{% url 'delete_comment' comment.pk %}">delete comment</a>
         <h1>{{comment.username}} on {{comment.timestamp}}</h1>
         <h2>{{comment.text}}</h2>
+        {% if comment.image_url %}
+            <img src="{{comment.image_url}}" alt="photo">
+        {% endif %}
+        {% if comment.image_file %}
+            <img src="{{comment.image_file.url}}" alt="photo">
+        {% endif %}
+        <hr>
         {% for reply in comment.get_all_replies %}
-            <hr>
             <h3>{{reply.username}} at {{reply.timestamp}}</h3>
+            <a href="{% url 'update_reply' reply.pk %}">update</a>
+            <a href="{% url 'delete_reply' reply.pk %}">delete</a>
             <p>{{reply.text}}</p>
+            {% if reply.image_url %}
+                <img src="{{reply.image_url}}" alt="photo">
+            {% endif %}
+            {% if reply.image_file %}
+                <img src="{{reply.image_file.url}}" alt="photo">
+            {% endif %}
+            <hr>
         {% endfor %}
         <a href="{% url 'create_reply' comment.pk %}">create a reply</a>
     </body>

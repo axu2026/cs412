@@ -1,12 +1,12 @@
 {% load static %}
 <html>
     <head>
-        <title>Create Reply</title>
+        <title>Update Reply</title>
         <link rel="stylesheet" href="{% static 'styles.css' %}">
     </head>
     <body>
         <a href="{% url 'home' %}">go back</a>
-        <h1>creating reply for {{comment}}</h1>
+        <h1>Updating {{reply}}</h1>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{form}}
