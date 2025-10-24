@@ -15,6 +15,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page="logout_confirmation"), name="logout"),
     path('logout/confirmation/', LoggedOutView.as_view(), name="logout_confirmation"),
     path('create_profile/', CreateProfileView.as_view(), name="create_profile"),
+    path('profile/', ProfileDetailView.as_view(), name="show_profile"),
     path('profile/<int:pk>', ProfileDetailView.as_view(), name="show_profile"),
     path('profile/create_post', CreatePostView.as_view(), name="create_post"),
     path('profile/update', UpdateProfileView.as_view(), name="update_profile"),

@@ -27,13 +27,28 @@ class ProfileDetailView(DetailView):
     model = Profile
     template_name = "mini_insta/show_profile.html"
 
+    def get_object(self, queryset = None):
+        """find the profile we are after"""
+
+        # check if a pk was provided, then find that profile
+        if 'pk' in self.kwargs:
+            return Profile.objects.get(pk=self.kwargs['pk'])
+
+        # if we have no pk, then get the authenticated user profile
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            user_profile = Profile.objects.get(user=user)
+
+            return user_profile
+        
+        return None
+
     def get_context_data(self, **kwargs):
         """override the context data for dealing with follow button"""
         context = super().get_context_data(**kwargs)
 
         # get the profile and add it to the context
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
+        profile = self.get_object()
         context['profile'] = profile
 
         # if there is a user, check if there is already a follow

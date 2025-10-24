@@ -48,7 +48,7 @@
             {% if request.user.is_authenticated %}
             <!--check if there is a profile to display-->
                 {% if profile and profile.user == request.user %}
-                    <a href="{% url 'show_profile' profile.pk %}" class="profile_home">
+                    <a href="{% url 'show_profile' %}" class="profile_home">
                         <img src="{{profile.profile_image_url}}" alt = "home" class="img_hover">
                     </a>
                 {% endif %}
