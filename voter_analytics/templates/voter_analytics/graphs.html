@@ -1,0 +1,23 @@
+<!--voter_analytics/graphs.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/31/25-->
+<!--The page that will show graphs of voter statistics.-->
+
+{% extends 'voter_analytics/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="voters_list">
+        {% include 'voter_analytics/search.html' %}
+        <div class="container">
+            <div class="row">
+                {{graph_birth_bar|safe}}
+            </div>
+            <div class="row">
+                {{graph_party_pie|safe}}
+            </div>
+            <div class="row">
+                {{graph_election_bar|safe}}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+<!--voter_analytics/base.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/30/25-->
+<!--The base html file for the voter analytics app.-->
+
+{% load static %}
+
+<html>
+    <head>
+        <title>Voter Analytics</title>
+        <link rel="stylesheet" href="{% static 'voter_analytics.css' %}">
+    </head>
+    <body>
+        <header style="display: grid;grid-template-columns: 1fr 1fr; align-items: center;">
+            <h1><a href="{% url 'voters' %}">Newton Voter Analytics</a></h1>
+            <div style="text-align: right;">
+                <a href="{% url 'voters' %}" style="margin: 8px;">Home</a>
+                <a href="{% url 'graphs' %}" style="margin: 8px;">Graphs</a>
+            </div>
+        </header>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>

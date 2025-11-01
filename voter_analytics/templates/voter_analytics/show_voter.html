@@ -1,0 +1,77 @@
+<!--voter_analytics/show_voter.html-->
+<!--Aidan Xu (axu26@bu.edu), 10/30/25-->
+<!--The page that will show a specific voter.-->
+
+{% extends 'voter_analytics/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="list">
+        <h2 style="text-align:center;margin:0;margin-top:16px;">Voter Details</h2>
+        <table class="voters">
+            <tr>
+                <td>First Name</td>
+                <td>{{voter.first_name}}</td>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td>{{voter.last_name}}</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <!--link to google maps-->
+                <td><a href="https://www.google.com/maps?q={{voter.full_address}}"
+                    target="_blank">
+                    {{voter.full_address}}
+                </a></td>
+            </tr>
+            <tr>
+                <td>Date of Birth</td>
+                <td>{{voter.date_of_birth}}</td>
+            </tr>
+            <tr>
+                <td>Date of Registration</td>
+                <td>{{voter.date_of_registration}}</td>
+            </tr>
+            <tr>
+                <td>Party</td>
+                <td>{{voter.party_affiliation}}</td>
+            </tr>
+            <tr>
+                <td>Precinct Number</td>
+                <td>{{voter.precinct_number}}</td>
+            </tr>
+            <tr>
+                <td>Voter Score</td>
+                <td>{{voter.voter_score}}</td>
+            </tr>
+            <tr>
+                <td>Past Elections Participation</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>v20state</td>
+                            <td>{{voter.v20state}}</td>
+                        </tr>
+                        <tr>
+                            <td>v21town</td>
+                            <td>{{voter.v21town}}</td>
+                        </tr>
+                        <tr>
+                            <td>v21primary</td>
+                            <td>{{voter.v21primary}}</td>
+                        </tr>
+                        <tr>
+                            <td>v22general</td>
+                            <td>{{voter.v22general}}</td>
+                        </tr>
+                        <tr>
+                            <td>v23town</td>
+                            <td>{{voter.v23town}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

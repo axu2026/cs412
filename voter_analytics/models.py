@@ -27,6 +27,20 @@ class Voter(models.Model):
         """string representation of a voter"""
         return f'{self.first_name} {self.last_name}'
     
+    def full_address(self):
+        """returns a string of the full address formatted"""
+        optional = ''
+
+        # if there is apt number, set optional field to it
+        if self.address_apt_number:
+            optional = f'APT. {self.address_apt_number}, '
+
+        zip = str(self.address_zip_code)
+        if len(zip) == 8:
+            zip = zip[:4] + "-" + zip[4:]
+
+        return f'{self.address_street_number} {self.address_street_name}, {optional}0{zip}'
+    
 def string_to_bool(string):
     """converts a string to its boolean counterpart"""
     return string.lower() == "true"
