@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    display: grid;
+    background-color: rgb(232, 236, 246);
+    grid-template-rows: auto 1fr auto;
+    height: 100%;
+}
+
+header {
+    background-color: rgb(19, 60, 121);
+    padding: 8px;
+}
+
+header a {
+    text-decoration: none;
+    color: white;
+    vertical-align: middle;
+}
+
+h1 {
+    margin: 0;
+}
+
+.voters_list {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+}
+
+.list {
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.voters {
+    padding: 8px;
+    margin: 8px;
+    border-radius: 8px;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.voters tr:nth-child(even) {
+  background-color: #efefef;
+}
+
+form {
+    margin: 8px;
+}
