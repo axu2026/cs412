@@ -19,4 +19,5 @@ urlpatterns = [
     path('api/pictures', PictureListAPIView.as_view(), name="api_picture_list"),
     path('api/picture/<int:pk>', PictureAPIView.as_view(), name="api_picture"),
     path('api/random', RandomAPIView.as_view(), name="api_random"),
+    path('api/random_picture', RandomPictureAPIView.as_view(), name="api_random_picture"),
 ]

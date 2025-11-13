@@ -103,3 +103,18 @@ class RandomAPIView(generics.RetrieveUpdateDestroyAPIView):
         random_pk = random.choice(joke_pks)
 
         return Joke.objects.get(pk=random_pk)
+    
+
+class RandomPictureAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """api view to retrieve a random picture"""
+
+    queryset = Picture.objects.all()
+    serializer_class = PictureSerializer
+
+    def get_object(self):
+        """return a random picture object"""
+
+        picture_pks = Picture.objects.values_list('pk', flat=True)
+        random_pk = random.choice(picture_pks)
+
+        return Picture.objects.get(pk=random_pk)
