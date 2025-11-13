@@ -76,21 +76,21 @@ class PictureListAPIView(generics.ListAPIView):
     serializer_class = PictureSerializer
 
 
-class JokeAPIView(generics.RetrieveAPIView):
+class JokeAPIView(generics.RetrieveUpdateDestroyAPIView):
     """api view to retrieve a single joke"""
 
     queryset = Joke.objects.all()
     serializer_class = JokeSerializer
 
 
-class PictureAPIView(generics.RetrieveAPIView):
+class PictureAPIView(generics.RetrieveUpdateDestroyAPIView):
     """api view to retrieve a single picture"""
 
     queryset = Picture.objects.all()
     serializer_class = PictureSerializer
 
 
-class RandomAPIView(generics.RetrieveAPIView):
+class RandomAPIView(generics.RetrieveUpdateDestroyAPIView):
     """api view to retrieve a random joke"""
 
     queryset = Joke.objects.all()

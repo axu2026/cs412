@@ -10,6 +10,13 @@
         <link rel="stylesheet" href="{% static 'dadjokes.css' %}">
     </head>
     <body>
+        <h1>Dad Jokes Application</h1>
+        <div>
+            <a href="{% url 'random' %}">Random Joke</a> • 
+            <a href="{% url 'joke_list' %}">All Jokes</a> • 
+            <a href="{% url 'picture_list' %}">All Pictures</a>
+        </div>
+        <hr>
         {% block content %}
         {% endblock %}
     </body>

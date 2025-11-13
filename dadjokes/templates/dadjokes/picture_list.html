@@ -7,10 +7,11 @@
 
 {% block content %}
     <div>
+        <h2>All Pictures</h2>
         <!--iterate through the pictures and display each one-->
         {% for picture in pictures %}
             <img 
-                src="{{ picture.image_url }}" 
+                src="{{picture.image_url}}" 
                 alt="picture"
             >
         {% endfor %}

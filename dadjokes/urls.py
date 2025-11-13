@@ -12,6 +12,7 @@ urlpatterns = [
     path('joke/<int:pk>', JokeDetailView.as_view(), name="joke_detail"),
     path('pictures', PictureListView.as_view(), name="picture_list"),
     path('picture/<int:pk>', PictureDetailView.as_view(), name="picture_detail"),
+    # api paths
     path('api/', RandomAPIView.as_view(), name="api"),
     path('api/jokes', JokeListAPIView.as_view(), name="api_joke_list"),
     path('api/joke/<int:pk>', JokeAPIView.as_view(), name="api_joke"),
