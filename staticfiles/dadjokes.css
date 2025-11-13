@@ -1,0 +1,11 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #cde3ff;
+}
+
+img {
+    max-width: 400px;
+    height: auto;
+    border-radius: 8px;
+}
