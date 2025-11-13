@@ -8,7 +8,7 @@
         <a href="{% url 'home' %}">go back</a>
         <a href="{% url 'update_comment' comment.pk %}">update comment</a>
         <a href="{% url 'delete_comment' comment.pk %}">delete comment</a>
-        <h1>{{comment.username}} on {{comment.timestamp}}</h1>
+        <h1>{{comment.user}} on {{comment.timestamp}}</h1>
         <h2>{{comment.text}}</h2>
         {% if comment.image_url %}
             <img src="{{comment.image_url}}" alt="photo">
@@ -18,7 +18,7 @@
         {% endif %}
         <hr>
         {% for reply in comment.get_all_replies %}
-            <h3>{{reply.username}} at {{reply.timestamp}}</h3>
+            <h3>{{reply.user}} at {{reply.timestamp}}</h3>
             <a href="{% url 'update_reply' reply.pk %}">update</a>
             <a href="{% url 'delete_reply' reply.pk %}">delete</a>
             <p>{{reply.text}}</p>

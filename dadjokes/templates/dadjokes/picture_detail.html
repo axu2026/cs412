@@ -1,0 +1,15 @@
+<!--dadjokes/picture_detail.html-->
+<!--aidan xu (axu26@bu.edu) 11/13/25-->
+<!--detail view to display a single picture-->
+
+{% extends 'dadjokes/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <img 
+            src="{{ picture.image_url }}" 
+            alt="picture"
+        >
+    </div>
+{% endblock %}

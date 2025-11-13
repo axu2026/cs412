@@ -1,0 +1,16 @@
+<!--dadjokes/base.html-->
+<!--aidan xu (axu26@bu.edu) 11/11/25-->
+<!--the base html file for the dadjokes app-->
+
+{% load static %}
+
+<html>
+    <head>
+        <title>Dad Jokes</title>
+        <link rel="stylesheet" href="{% static 'dadjokes.css' %}">
+    </head>
+    <body>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>

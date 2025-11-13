@@ -1,0 +1,15 @@
+<!--dadjokes/joke_list.html-->
+<!--aidan xu (axu26@bu.edu) 11/13/25-->
+<!--list view to display a list of jokes-->
+
+{% extends 'dadjokes/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <!--iterate through the jokes and display each one-->
+        {% for joke in jokes %}
+            <p>{{ joke.joke }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

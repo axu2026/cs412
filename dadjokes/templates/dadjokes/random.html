@@ -1,0 +1,16 @@
+<!--dadjokes/random.html-->
+<!--aidan xu (axu26@bu.edu) 11/11/25-->
+<!--template view to display a random joke and picture-->
+
+{% extends 'dadjokes/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <img 
+            src="{{picture.image_url}}" 
+            alt="picture"
+        >
+        <p>{{joke.joke}}</p>
+    </div>
+{% endblock %}

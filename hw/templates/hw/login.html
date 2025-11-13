@@ -1,0 +1,12 @@
+<h1>log in page</h1>
+<a href="{% url 'home' %}">go back</a>
+<form action="{% url 'loginhw' %}" method="POST">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit">
+    {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{request.GET.next}}">
+    {% else %}
+        <input type="hidden" name="next" value="{% url 'home' %}">
+    {% endif %}
+</form>

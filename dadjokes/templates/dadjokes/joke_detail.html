@@ -1,0 +1,12 @@
+<!--dadjokes/joke_detail.html-->
+<!--aidan xu (axu26@bu.edu) 11/13/25-->
+<!--detail view to display a single joke-->
+
+{% extends 'dadjokes/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <p>{{ joke.joke }}</p>
+    </div>
+{% endblock %}

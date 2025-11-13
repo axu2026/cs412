@@ -5,9 +5,19 @@
         <link rel="stylesheet" href="{% static 'styles.css' %}">
     </head>
     <body>
-        <h1>welcome to hello world app. this is currently being used to practice for quiz 3</h1>
+        <h1>welcome to hello world app. this is currently being used to practice for quiz 4</h1>
+        {% if request.user.is_authenticated %}
+            <span>welcome {{request.user}}</span>
+            <form action="{% url 'logouthw' %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="log out">
+            </form>
+        {% else %}
+            <a href="{% url 'loginhw' %}">log in</a>
+            <a href="{% url 'signup' %}">sign in</a>
+        {% endif %}
         {% for comment in comments %}
-            <a href="{% url 'comment' comment.pk %}"><h3>{{comment.username}} at {{comment.timestamp}}</h3></a>
+            <a href="{% url 'comment' comment.pk %}"><h3>{{comment.user}} at {{comment.timestamp}}</h3></a>
             <p>{{comment.text}}</p>
             {% if comment.image_url %}
                 <img src="{{comment.image_url}}" alt="photo">

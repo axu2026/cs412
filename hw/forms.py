@@ -7,7 +7,7 @@ class CreateCommentForm(forms.ModelForm):
     class Meta:
         """field for the form"""
         model = Comment
-        fields = ['username', 'text', 'image_url', 'image_file']
+        fields = ['text', 'image_url', 'image_file']
 
 
 class CreateReplyForm(forms.ModelForm):
@@ -16,7 +16,7 @@ class CreateReplyForm(forms.ModelForm):
     class Meta:
         """field for the form"""
         model = Reply
-        fields = ['username', 'text', 'image_url', 'image_file']
+        fields = ['text', 'image_url', 'image_file']
 
 class UpdateCommentForm(forms.ModelForm):
     """updates the comment object"""

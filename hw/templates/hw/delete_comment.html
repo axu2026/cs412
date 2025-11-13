@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="{% static 'styles.css' %}">
     </head>
     <body>
-        <a href="{% url 'home' %}">go back</a>
+        <a href="{% url 'comment' comment.pk %}">go back</a>
         <h1>Delete {{comment}}?</h1>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}

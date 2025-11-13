@@ -1,0 +1,39 @@
+{% if is_paginated %}
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&gender={{request.GET.gender}}"><</a>
+    {% endif %}
+    <span>{{page_obj.number}} / {{page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&gender={{request.GET.gender}}">></a>
+    {% endif %}
+{% endif %}
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Age</td>
+        <td>Gender</td>
+        <td>Hours Online</td>
+    </tr>
+    {% for stat in stats %}
+        <tr>
+            <td>{{stat.name}}</td>
+            <td>{{stat.age}}</td>
+            <td>{{stat.gender}}</td>
+            <td>{{stat.hours_online}}</td>
+        </tr>
+    {% endfor %}
+</table>
+<form action="{% url 'stats' %}" method="GET">
+    <select id="gender" name="gender">
+        <option value=""
+        {% if request.GET.gender == "" %} selected {% endif %}></option>
+        <option value="Male"
+        {% if request.GET.gender == "Male" %} selected {% endif %}>Male</option>
+        <option value="Female"
+        {% if request.GET.gender == "Female" %} selected {% endif %}>Female</option>
+    </select>
+    <input type="submit">
+</form>
+<div>
+    {{graph|safe}}
+</div>

@@ -1,0 +1,18 @@
+<!--dadjokes/picture_list.html-->
+<!--aidan xu (axu26@bu.edu) 11/13/25-->
+<!--list view to display a list of pictures-->
+
+{% extends 'dadjokes/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <!--iterate through the pictures and display each one-->
+        {% for picture in pictures %}
+            <img 
+                src="{{ picture.image_url }}" 
+                alt="picture"
+            >
+        {% endfor %}
+    </div>
+{% endblock %}

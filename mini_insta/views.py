@@ -737,3 +737,11 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         """return to the show_post view after making a comment"""
         return reverse('show_post', kwargs={'pk':self.kwargs['pk']})
+    
+
+from rest_framework import generics
+from .serializers import *
+
+class ProfileListAPIView(generics.ListCreateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer

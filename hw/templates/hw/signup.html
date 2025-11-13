@@ -1,0 +1,7 @@
+<h1>create a new user</h1>
+
+<form action="{% url 'signup' %}" method="POST">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit">
+</form>
