@@ -1,0 +1,33 @@
+<!--project/base.html-->
+<!--Aidan Xu (axu26@bu.edu) 11/24/25-->
+<!--base template containing header, footer, and content for every page-->
+
+{% load static %}
+<html>
+    <head>
+        <title>Jump World POS</title>
+        <link rel="stylesheet" href="{% static 'project.css' %}">
+    </head>
+    <body>
+        <header>
+            <!--show if there is a user currently authenticated-->
+            {% if request.user.is_authenticated %}
+                <span>Logged in as {{request.user}}</span>
+                <form action="{% url 'logout' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit", value="Log out">
+                </form>
+            {% else %}
+                <span>Not logged in</span>
+                <a href="{% url 'login' %}">
+                    Log in
+                </a>
+            {% endif %}
+        </header>
+        {% block content %}
+        {% endblock %}
+        <footer>
+
+        </footer>
+    </body>
+</html>

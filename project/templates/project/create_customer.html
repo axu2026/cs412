@@ -1,0 +1,26 @@
+<!--project/create_customer.html-->
+<!--Aidan Xu (axu26@bu.edu) 11/24/25-->
+<!--template to provide form to create a customer-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <h1>Create an account</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{form_user}}
+            <h3>Personal Information</h3>
+            {{form}}
+            <input type="submit" value="Create account">
+        </form>
+        <a href="{% url 'login' %}">
+            Log in to an existing account
+        </a>
+        <br>
+        <a href="{% url 'home' %}">
+            Go back home
+        </a>
+    </div>
+{% endblock %}

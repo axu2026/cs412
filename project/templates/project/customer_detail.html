@@ -1,0 +1,59 @@
+<!--project/customer_detail.html-->
+<!--Aidan Xu (axu26@bu.edu) 11/24/25-->
+<!--template to show details of a customer-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <h1>Account Information</h1>
+        <p>{{customer.first_name}} {{customer.last_name}}</p>
+        <p>{{customer.date_of_birth}}</p>
+        <p>{{customer.address}}</p>
+        <p>{{customer.phone_number}}</p>
+        <p>{{customer.email}}</p>
+        <a href="{% url 'update_customer' customer.pk %}">
+            Edit
+        </a>
+        <h1>Dependents</h1>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>Actions</th>
+            </tr>
+            <!--go through all dependents of the customer and display them-->
+            {% for dependent in dependents %}
+                <tr>
+                    <td>{{dependent.first_name}} {{dependent.last_name}}</td>
+                    <td>{{dependent.date_of_birth}}</td>
+                    <td>
+                        <a href="{% url 'update_dependent' customer.pk dependent.pk %}">
+                            Edit
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <a href="{% url 'create_dependent' customer.pk %}">
+                Add a dependent
+            </a>
+        </table>
+        <h1>Sale History</h1>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Amount paid</th>
+                <th>Created by</th>
+            </tr>
+            <!--go through all the sales of the customer and display them-->
+            {% for sale in sales %}
+                <tr>
+                    <td>{{sale.created_at}}</td>
+                    <td>{{sale.amount_paid}}</td>
+                    <td>{{sale.employee}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

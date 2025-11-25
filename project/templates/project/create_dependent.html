@@ -1,0 +1,20 @@
+<!--project/create_dependent.html-->
+<!--Aidan Xu (axu26@bu.edu) 11/25/25-->
+<!--template to create a dependent-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <h1>Add dependent</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{form}}
+            <input type="submit" value="Add dependent">
+        </form>
+        <a href="{% url 'customer' customer.pk %}">
+            Go back
+        </a>
+    </div>
+{% endblock %}

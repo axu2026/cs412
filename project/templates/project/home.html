@@ -1,0 +1,21 @@
+<!--project/home.html-->
+<!--Aidan Xu (axu26@bu.edu) 11/24/25-->
+<!--start template, provides log in for either customer or employee-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div>
+        <h1>Welcome to Jump World!</h1>
+        <h3>Customer Log In</h3>
+        <a href="{% url 'login' %}">
+            Log in
+        </a>
+        <br>
+        <a href="{% url 'create_customer' %}">
+            Create an account
+        </a>
+        <h3>Staff Log In</h3>
+    </div>
+{% endblock %}
