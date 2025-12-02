@@ -1,0 +1,19 @@
+<!--project/delete_customer.html-->
+<!--Aidan Xu (axu26@bu.edu) 11/28/25-->
+<!--template to delete a dependent-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Remove {{dependent}}?</h1>
+    <!--form to confirm deletion of a dependent-->
+    <form method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Yes">
+    </form>
+    <!--provide cancel option-->
+    <a href="{% url 'customer' dependent.guardian.pk %}">
+        Cancel and go back
+    </a>
+{% endblock %}

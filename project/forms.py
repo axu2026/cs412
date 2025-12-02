@@ -4,6 +4,13 @@
 
 from django import forms
 from .models import *
+from datetime import datetime
+from decimal import Decimal
+
+class AddPaymentForm(forms.Form):
+    """a form to add payment to a sale"""
+    amount = forms.DecimalField(min_value=0, decimal_places=2)
+
 
 class CreateCustomerForm(forms.ModelForm):
     """the form to create a new customer account"""
@@ -17,6 +24,12 @@ class CreateCustomerForm(forms.ModelForm):
                   'date_of_birth', 
                   'phone_number', 
                   'email']
+        # use built in widget to change dob input
+        widgets = {
+            'date_of_birth': forms.SelectDateWidget(
+                years=range(1900, datetime.now().year - 17)
+            ),
+        }
     
     def clean_phone_number(self):
         """makes sure the phone number form field is valid"""
@@ -39,3 +52,19 @@ class CreateDependentForm(forms.ModelForm):
         fields = ['first_name',
                   'last_name',
                   'date_of_birth']
+        # use built in widget to change dob input
+        widgets = {
+            'date_of_birth': forms.SelectDateWidget(
+                years=range(datetime.now().year-17, datetime.now().year)
+            ),
+        }
+
+
+class CreateSaleItemForm(forms.ModelForm):
+    """the form to create a new saleitem"""
+    discount = forms.DecimalField(min_value=0, max_value=1, decimal_places=2)
+
+    class Meta:
+        """tie the form to the saleitem model"""
+        model = SaleItem
+        fields = ['description']

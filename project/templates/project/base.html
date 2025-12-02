@@ -9,25 +9,31 @@
         <link rel="stylesheet" href="{% static 'project.css' %}">
     </head>
     <body>
-        <header>
-            <!--show if there is a user currently authenticated-->
-            {% if request.user.is_authenticated %}
-                <span>Logged in as {{request.user}}</span>
-                <form action="{% url 'logout' %}" method="POST">
-                    {% csrf_token %}
-                    <input type="submit", value="Log out">
-                </form>
-            {% else %}
-                <span>Not logged in</span>
-                <a href="{% url 'login' %}">
-                    Log in
+        <div class="container">
+            <header>
+                <a href="{% url 'home' %}">
+                    Jump World
                 </a>
-            {% endif %}
-        </header>
-        {% block content %}
-        {% endblock %}
-        <footer>
-
-        </footer>
+                <!--show if there is a user currently authenticated-->
+                {% if request.user.is_authenticated %}
+                    <span>Logged in as {{request.user}}</span>
+                    <!--provide a logout button-->
+                    <form action="{% url 'logout' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit", value="Log out">
+                    </form>
+                {% else %}
+                    <span>Not logged in</span>
+                {% endif %}
+            </header>
+            <!--main content-->
+            <div class="content">
+                {% block content %}
+                {% endblock %}
+            </div>
+            <footer>
+                <p>Aidan Xu (axu26@bu.edu) CS 412, Fall 2025</p>
+            </footer>
+        </div>
     </body>
 </html>

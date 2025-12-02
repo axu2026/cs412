@@ -6,25 +6,22 @@
 {% load static %}
 
 {% block content %}
-    <div>
-        <h1>Log In</h1>
-        <form action="{% url 'login' %}" method="POST">
-            {% csrf_token %}
-            {{form}}
-            <input type="submit" value="Log In">
-            <!--check if there is an existing redirect-->
-            {% if request.GET.next %}
-                <input type="hidden" name="next" value="{{request.GET.next}}">
-            {% else %}
-                <input type="hidden" name="next" value="{% url 'customers' %}">
-            {% endif %}
-        </form>
-        <a href="{% url 'create_customer' %}">
-            Create a new account
-        </a>
-        <br>
-        <a href="{% url 'home' %}">
-            Go back home
-        </a>
-    </div>
+    <h1>Log In</h1>
+    <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Log In">
+        <!--check if there is an existing redirect-->
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{request.GET.next}}">
+        {% endif %}
+    </form>
+    <!--provide extra action options to the user-->
+    <a href="{% url 'create_customer' %}">
+        Create a new account
+    </a>
+    <br>
+    <a href="{% url 'home' %}">
+        Go back home
+    </a>
 {% endblock %}

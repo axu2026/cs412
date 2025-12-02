@@ -1,0 +1,96 @@
+<!--project/sale_detail.html-->
+<!--Aidan Xu (axu26@bu.edu) 11/30/25-->
+<!--template to view a sale-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="sale-container">
+        <div>
+            <h1>Sale {{sale.pk}}</h1>
+            <table>
+                <tr>
+                    <th>Date:</th>
+                    <td>{{sale.created_at}}</td>
+                </tr>
+                <tr>
+                    <th>Customer:</th>
+                    <td>
+                        <a href="{% url 'customer' sale.customer.pk %}">
+                            {{sale.customer}}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Merchant:</th>
+                    <td>{{sale.employee}}</td>
+                </tr>
+            </table>
+            <h3>Items</h3>
+            <table>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <!--employees only-->
+                    {% if is_employee %}<th>Action</th>{% endif %}
+                </tr>
+                <!--iterate through all saleitems in the sale-->
+                {% for saleitem in saleitems %}
+                    <tr>
+                        <td>{{saleitem.item}}</td>
+                        <td>${{saleitem.price}}</td>
+                        <!--only employees have permission to delete items-->
+                        {% if is_employee %}
+                            <td>
+                                <a href="{% url 'delete_saleitem' saleitem.pk %}">
+                                    Delete
+                                </a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <hr>
+            <table>
+                <tr>
+                    <th style="text-align: right;">Total:</th>
+                    <td>${{total}}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: right;">Paid:</th>
+                    <td>${{sale.amount_paid}}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: right;">Balance:</th>
+                    <td>${{balance}}</td>
+                </tr>
+            </table>
+        </div>
+        <!--provide employee actions if the current user is an employee-->
+        {% if is_employee %}
+            <div>
+                <h1>Employee Actions</h1>
+                <h3>Add Payment</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{form}}
+                    <input type="submit">
+                </form>
+                <h3>Add Items</h3>
+                <table>
+                    <!--go through all possible items and display them-->
+                    {% for item in items %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'create_saleitem' sale.pk item.pk %}">
+                                    {{item.name}} (${{item.price}})
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

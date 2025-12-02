@@ -1,0 +1,14 @@
+<!--project/no_permission.html-->
+<!--Aidan Xu (axu26@bu.edu) 11/25/25-->
+<!--lets the user know they do not have permission to access something-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Permission Denied</h1>
+    <p>You do not have permission to view this.</p>
+    <a href="{% url 'home' %}">
+        Go back home
+    </a>
+{% endblock %}

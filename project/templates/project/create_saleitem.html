@@ -1,0 +1,20 @@
+<!--project/create_saleitem.html-->
+<!--Aidan Xu (axu26@bu.edu) 12/2/25-->
+<!--template to create a saleitem-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Add {{item}}?</h1>
+    <!--form to create a saleitem-->
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Yes">
+    </form>
+    <!--provide a cancel option-->
+    <a href="{% url 'sale' sale.pk %}">
+        Go back
+    </a>
+{% endblock %}

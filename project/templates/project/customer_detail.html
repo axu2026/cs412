@@ -6,54 +6,81 @@
 {% load static %}
 
 {% block content %}
-    <div>
-        <h1>Account Information</h1>
-        <p>{{customer.first_name}} {{customer.last_name}}</p>
-        <p>{{customer.date_of_birth}}</p>
-        <p>{{customer.address}}</p>
-        <p>{{customer.phone_number}}</p>
-        <p>{{customer.email}}</p>
-        <a href="{% url 'update_customer' customer.pk %}">
-            Edit
-        </a>
-        <h1>Dependents</h1>
-        <table>
+    <h1>Account Information</h1>
+    <table>
+        <tr>
+            <th>Name:</th>
+            <td>{{customer.first_name}} {{customer.last_name}}</td>
+        </tr>
+        <tr>
+            <th>Date of Birth:</th>
+            <td>{{customer.date_of_birth}}</td>
+        </tr>
+        <tr>
+            <th>Address:</th>
+            <td>{{customer.address}}</td>
+        </tr>
+        <tr>
+            <th>Phone Number:</th>
+            <td>{{customer.phone_number}}</td>
+        </tr>
+        <tr>
+            <th>Email:</th>
+            <td>{{customer.email}}</td>
+        </tr>
+    </table>
+    <!--url to updateview for the customer-->
+    <a href="{% url 'update_customer' customer.pk %}">
+        Edit
+    </a>
+    <h3>Dependents</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Date of Birth</th>
+            <th>Actions</th>
+        </tr>
+        <!--go through all dependents of the customer and display them-->
+        {% for dependent in dependents %}
             <tr>
-                <th>Name</th>
-                <th>Date of Birth</th>
-                <th>Actions</th>
+                <td>{{dependent.first_name}} {{dependent.last_name}}</td>
+                <td>{{dependent.date_of_birth}}</td>
+                <td>
+                    <a href="{% url 'update_dependent' dependent.pk %}">
+                        Edit
+                    </a>
+                    <a href="{% url 'delete_dependent' dependent.pk %}">
+                        Remove
+                    </a>
+                </td>
             </tr>
-            <!--go through all dependents of the customer and display them-->
-            {% for dependent in dependents %}
-                <tr>
-                    <td>{{dependent.first_name}} {{dependent.last_name}}</td>
-                    <td>{{dependent.date_of_birth}}</td>
-                    <td>
-                        <a href="{% url 'update_dependent' customer.pk dependent.pk %}">
-                            Edit
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            <a href="{% url 'create_dependent' customer.pk %}">
-                Add a dependent
-            </a>
-        </table>
-        <h1>Sale History</h1>
-        <table>
+        {% endfor %}
+    </table>
+    <!--link to createview for dependents-->
+    <a href="{% url 'create_dependent' customer.pk %}">
+        Add a dependent
+    </a>
+    <h3>Sale History</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Amount Paid</th>
+            <th>Created by</th>
+        </tr>
+        <!--go through all the sales of the customer and display them-->
+        {% for sale in sales %}
             <tr>
-                <th>Date</th>
-                <th>Amount paid</th>
-                <th>Created by</th>
+                <!--link to detailview for sale-->
+                <td>
+                    <a href="{% url 'sale' sale.pk %}">
+                        {{sale.pk}}
+                    </a>
+                </td>
+                <td>{{sale.created_at}}</td>
+                <td>${{sale.amount_paid}}</td>
+                <td>{{sale.employee}}</td>
             </tr>
-            <!--go through all the sales of the customer and display them-->
-            {% for sale in sales %}
-                <tr>
-                    <td>{{sale.created_at}}</td>
-                    <td>{{sale.amount_paid}}</td>
-                    <td>{{sale.employee}}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
+        {% endfor %}
+    </table>
 {% endblock %}

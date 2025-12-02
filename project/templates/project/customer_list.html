@@ -6,37 +6,61 @@
 {% load static %}
 
 {% block content %}
-    <div>
-        <h1>Customers</h1>
-        <table>
+    <h1>Search Accounts</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Date of Birth</th>
+            <th>Address</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        <!--search form-->
+        <form method="GET">
+            <input type="text" 
+                name="query" 
+                value="{{ request.GET.query|default:'' }}"
+                placeholder="Enter search query"
+            >
+            <input type="submit">
+        </form>
+        <h3>Customers</h3>
+        <!--pagination-->
+        {% if is_paginated %}
+            <!--if there is a previous page, give option to go back-->
+            {% if page_obj.has_previous %}
+                <!--this line is long, i cannot put newlines lest it breaks-->
+                <!--make sure to pass all parameters in request.GET into url-->
+                <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{key}}={{value|urlencode}}{% endif %}{% endfor %}"><</a>
+            {% endif %}
+            <span>{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+            <!--if there is a next page, give option to go next-->
+            {% if page_obj.has_next %}
+                <!--make sure to pass all parameters in request.GET into url-->
+                <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{key}}={{value|urlencode}}{% endif %}{% endfor %}">></a>
+            {% endif %}
+        {% endif %}
+        <!--loop through the customers and show their info/options-->
+        {% for customer in customers %}
             <tr>
-                <th>Name</th>
-                <th>Date of Birth</th>
-                <th>Address</th>
-                <th>Phone Number</th>
-                <th>Email</th>
-                <th>Actions</th>
+                <td>
+                    <!--link to customer detailview-->
+                    <a href="{% url 'customer' customer.pk %}">
+                        {{customer.first_name}} {{customer.last_name}}
+                    </a>
+                </td>
+                <td>{{customer.date_of_birth}}</td>
+                <td>{{customer.address}}</td>
+                <td>{{customer.phone_number}}</td>
+                <td>{{customer.email}}</td>
+                <td>
+                    <!--option to create a sale with the customer-->
+                    <a>
+                        Create a sale
+                    </a>
+                </td>
             </tr>
-            <!--loop through the customers and show their info/options-->
-            {% for customer in customers %}
-                <tr>
-                    <td>
-                        <a href="{% url 'customer' customer.pk %}">
-                            {{customer.first_name}} {{customer.last_name}}
-                        </a>
-                    </td>
-                    <td>{{customer.date_of_birth}}</td>
-                    <td>{{customer.address}}</td>
-                    <td>{{customer.phone_number}}</td>
-                    <td>{{customer.email}}</td>
-                    <td>
-                        <!--option to create a sale with the customer-->
-                        <a>
-                            Create a sale
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
+        {% endfor %}
+    </table>
 {% endblock %}

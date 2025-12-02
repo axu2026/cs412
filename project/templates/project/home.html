@@ -6,9 +6,11 @@
 {% load static %}
 
 {% block content %}
-    <div>
-        <h1>Welcome to Jump World!</h1>
-        <h3>Customer Log In</h3>
+    <h1>Welcome to Jump World!</h1>
+    <!--present log in links if there is no user-->
+    {% if not request.user.is_authenticated %}
+        <!--log in link-->
+        <h3>Please Log In or Create an Account!</h3>
         <a href="{% url 'login' %}">
             Log in
         </a>
@@ -16,6 +18,19 @@
         <a href="{% url 'create_customer' %}">
             Create an account
         </a>
-        <h3>Staff Log In</h3>
-    </div>
+    {% endif %}
+    <!--provide customer navigation if there is a customer user-->
+    {% if customer %}
+        <h3>Customer Navigation</h3>
+        <a href="{% url 'customer' customer.pk %}">
+            View account information
+        </a>
+    {% endif %}
+    <!--provide employee navigation if there is an employee user-->
+    {% if employee %}
+        <h3>Employee Navigation</h3>
+        <a href="{% url 'customers' %}">
+            Employee View
+        </a>
+    {% endif %}
 {% endblock %}

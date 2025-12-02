@@ -5,6 +5,8 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.db.models import Sum
+from decimal import Decimal
 
 # Create your models here.
 class Customer(models.Model):
@@ -64,6 +66,20 @@ class Sale(models.Model):
     def __str__(self):
         """return the string representation of a sale"""
         return f'{self.customer} on {self.created_at}'
+    
+    def get_total_price(self):
+        """get the total price of the sale"""
+        saleitems = SaleItem.objects.filter(sale=self)
+
+        # check if there are any saleitems to begin with
+        if saleitems:
+            # sum all totals together and format
+            return (saleitems
+                    .aggregate(total=Sum('price'))['total']
+                    .quantize(Decimal('0.00')))
+            
+        # otherwise, return 0
+        return Decimal('0.00')
 
 
 class Item(models.Model):
@@ -74,7 +90,7 @@ class Item(models.Model):
 
     def __str__(self):
         """return the string representation of an item"""
-        return f'{self.name} (${self.price})'
+        return f'{self.name}'
 
 
 class SaleItem(models.Model):

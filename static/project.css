@@ -5,4 +5,30 @@
 
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 0;
+}
+
+footer {
+    text-align: center;
+    color: gray;
+}
+
+table {
+    text-align: left;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content {
+    flex-grow: 1;
+    margin: 8;
+}
+
+.sale-container {
+    display: grid;
+    grid-template-columns: auto auto;
 }

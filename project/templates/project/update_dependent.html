@@ -6,14 +6,15 @@
 {% load static %}
 
 {% block content %}
-    <div>
-        <form method="POST">
-            {% csrf_token %}
-            {{form}}
-            <input type="submit" value="Update" class="button">
-        </form>
-        <a href="{% url 'customer' customer.pk %}">
-            Go back
-        </a>
-    </div>
+    <h1>Update {{dependent}}</h1>
+    <!--form to update a dependent-->
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Update" class="button">
+    </form>
+    <!--provide cancel button-->
+    <a href="{% url 'customer' dependent.guardian.pk %}">
+        Go back
+    </a>
 {% endblock %}

@@ -6,15 +6,15 @@
 {% load static %}
 
 {% block content %}
-    <div>
-        <h1>Add dependent</h1>
-        <form method="POST">
-            {% csrf_token %}
-            {{form}}
-            <input type="submit" value="Add dependent">
-        </form>
-        <a href="{% url 'customer' customer.pk %}">
-            Go back
-        </a>
-    </div>
+    <h1>Add dependent</h1>
+    <!--form to create a dependent-->
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Add dependent">
+    </form>
+    <!--provide a cancel option-->
+    <a href="{% url 'customer' customer.pk %}">
+        Go back
+    </a>
 {% endblock %}
