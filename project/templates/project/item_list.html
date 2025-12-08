@@ -1,0 +1,35 @@
+<!--project/item_list.html-->
+<!--Aidan Xu (axu26@bu.edu) 12/8/25-->
+<!--template for item list-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Items</h1>
+    <a href="{% url 'create_item' %}">
+        Add an item
+    </a>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        <!--go through all items and display them-->
+        {% for item in items %}
+            <tr>
+                <td>{{item.name}}</td>
+                <td>${{item.price}}</td>
+                <td>
+                    <a href="{% url 'update_item' item.pk %}">
+                        Edit
+                    </a>
+                    <a href="{% url 'delete_item' item.pk %}">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

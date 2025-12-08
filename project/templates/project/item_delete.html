@@ -1,0 +1,19 @@
+<!--project/item_delete.html-->
+<!--Aidan Xu (axu26@bu.edu) 12/8/25-->
+<!--template to delete an item-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Delete {{item.name}}?</h1>
+    <!--form to delete an item-->
+    <form method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+    </form>
+    <!--provide a cancel option-->
+    <a href="{% url 'items' %}">
+        Go back
+    </a>
+{% endblock %}

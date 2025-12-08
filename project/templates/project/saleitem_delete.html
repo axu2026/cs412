@@ -1,19 +1,19 @@
-<!--project/delete_customer.html-->
-<!--Aidan Xu (axu26@bu.edu) 11/28/25-->
-<!--template to delete a dependent-->
+<!--project/saleitem_delete.html-->
+<!--Aidan Xu (axu26@bu.edu) 12/1/25-->
+<!--template to delete a saleitem-->
 
 {% extends 'project/base.html' %}
 {% load static %}
 
 {% block content %}
-    <h1>Remove {{dependent}}?</h1>
-    <!--form to confirm deletion of a dependent-->
+    <h1>Delete {{saleitem.name}}?</h1>
+    <!--form to confirm deletion of saleitem-->
     <form method="POST">
         {% csrf_token %}
         <input type="submit" value="Yes">
     </form>
     <!--provide cancel option-->
-    <a href="{% url 'customer' dependent.guardian.pk %}">
+    <a href="{% url 'sale' saleitem.sale.pk %}">
         Cancel and go back
     </a>
 {% endblock %}

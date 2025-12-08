@@ -1,0 +1,19 @@
+<!--project/sale_create.html-->
+<!--Aidan Xu (axu26@bu.edu) 12/7/25-->
+<!--template to create a sale-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Create sale for {{customer.first_name}} {{customer.last_name}}?</h1>
+    <!--form to create a sale-->
+    <form method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Yes">
+    </form>
+    <!--provide a cancel option-->
+    <a href="{% url 'customer' customer.pk %}">
+        Cancel
+    </a>
+{% endblock %}

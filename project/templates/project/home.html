@@ -30,7 +30,11 @@
     {% if employee %}
         <h3>Employee Navigation</h3>
         <a href="{% url 'customers' %}">
-            Employee View
+            Find Customer
+        </a>
+        <br>
+        <a href="{% url 'items' %}">
+            Manage Items
         </a>
     {% endif %}
 {% endblock %}

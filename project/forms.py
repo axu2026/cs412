@@ -27,7 +27,7 @@ class CreateCustomerForm(forms.ModelForm):
         # use built in widget to change dob input
         widgets = {
             'date_of_birth': forms.SelectDateWidget(
-                years=range(1900, datetime.now().year - 17)
+                years=range(1900, datetime.now().year)
             ),
         }
     
@@ -48,7 +48,7 @@ class CreateDependentForm(forms.ModelForm):
 
     class Meta:
         """tie to form to the dependent model"""
-        model = Dependent
+        model = Customer
         fields = ['first_name',
                   'last_name',
                   'date_of_birth']
@@ -62,9 +62,26 @@ class CreateDependentForm(forms.ModelForm):
 
 class CreateSaleItemForm(forms.ModelForm):
     """the form to create a new saleitem"""
-    discount = forms.DecimalField(min_value=0, max_value=1, decimal_places=2)
 
     class Meta:
         """tie the form to the saleitem model"""
         model = SaleItem
-        fields = ['description']
+        fields = []
+
+
+class CreateSaleForm(forms.ModelForm):
+    """the form to confirm a new sale"""
+
+    class Meta:
+        """tie form to sale model"""
+        model = Sale
+        fields = []
+
+
+class CreateItemForm(forms.ModelForm):
+    """the form to create an item"""
+
+    class Meta:
+        """tie the form to the item model"""
+        model = Item
+        fields = ['name', 'price']

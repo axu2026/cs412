@@ -1,0 +1,20 @@
+<!--project/item_update.html-->
+<!--Aidan Xu (axu26@bu.edu) 12/8/25-->
+<!--template to update an item-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Update {{item.name}}</h1>
+    <!--form to update item-->
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Update">
+    </form>
+    <!--provide a cancel option-->
+    <a href="{% url 'items' %}">
+        Go back
+    </a>
+{% endblock %}

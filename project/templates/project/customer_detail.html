@@ -28,59 +28,83 @@
             <th>Email:</th>
             <td>{{customer.email}}</td>
         </tr>
+        {% if customer.is_dependent and customer.guardian %}
+            <tr>
+                <th>Guardian:</th>
+                <td>
+                    <a href="{% url 'customer' customer.guardian.pk %}">
+                        {{customer.guardian}}
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
     </table>
     <!--url to updateview for the customer-->
     <a href="{% url 'update_customer' customer.pk %}">
         Edit
     </a>
-    <h3>Dependents</h3>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Date of Birth</th>
-            <th>Actions</th>
-        </tr>
-        <!--go through all dependents of the customer and display them-->
-        {% for dependent in dependents %}
+    {% if not customer.is_dependent %}
+        <h3>Dependents</h3>
+        <!--link to createview for dependents-->
+        <a href="{% url 'create_dependent' customer.pk %}">
+            Add a dependent
+        </a>
+        <table>
             <tr>
-                <td>{{dependent.first_name}} {{dependent.last_name}}</td>
-                <td>{{dependent.date_of_birth}}</td>
-                <td>
-                    <a href="{% url 'update_dependent' dependent.pk %}">
-                        Edit
-                    </a>
-                    <a href="{% url 'delete_dependent' dependent.pk %}">
-                        Remove
-                    </a>
-                </td>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>Actions</th>
             </tr>
-        {% endfor %}
-    </table>
-    <!--link to createview for dependents-->
-    <a href="{% url 'create_dependent' customer.pk %}">
-        Add a dependent
-    </a>
-    <h3>Sale History</h3>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Amount Paid</th>
-            <th>Created by</th>
-        </tr>
-        <!--go through all the sales of the customer and display them-->
-        {% for sale in sales %}
+            <!--go through all dependents of the customer and display them-->
+            {% for dependent in dependents %}
+                <tr>
+                    <td>
+                        {% if is_employee %}
+                            <a href="{% url 'customer' dependent.pk %}">
+                                {{dependent.first_name}} {{dependent.last_name}}
+                            </a>
+                        {% else %}
+                            {{dependent.first_name}} {{dependent.last_name}}
+                        {% endif %}
+                    </td>
+                    <td>{{dependent.date_of_birth}}</td>
+                    <td>
+                        <a href="{% url 'update_dependent' dependent.pk %}">
+                            Edit
+                        </a>
+                        <a href="{% url 'delete_dependent' dependent.pk %}">
+                            Remove
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <h3>Sale History</h3>
+        <!--check if there is a employee to provide action-->
+        {% if is_employee %}
+            <a href="{% url 'create_sale' customer.pk %}">
+                Add Sale
+            </a>
+        {% endif %}
+        <table>
             <tr>
-                <!--link to detailview for sale-->
-                <td>
-                    <a href="{% url 'sale' sale.pk %}">
-                        {{sale.pk}}
-                    </a>
-                </td>
-                <td>{{sale.created_at}}</td>
-                <td>${{sale.amount_paid}}</td>
-                <td>{{sale.employee}}</td>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Created by</th>
             </tr>
-        {% endfor %}
-    </table>
+            <!--go through all the sales of the customer and display them-->
+            {% for sale in sales %}
+                <tr>
+                    <!--link to detailview for sale-->
+                    <td>
+                        <a href="{% url 'sale' sale.pk %}">
+                            {{sale.pk}}
+                        </a>
+                    </td>
+                    <td>{{sale.created_at}}</td>
+                    <td>{{sale.employee}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 {% endblock %}

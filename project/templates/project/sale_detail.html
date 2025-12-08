@@ -38,7 +38,7 @@
                 <!--iterate through all saleitems in the sale-->
                 {% for saleitem in saleitems %}
                     <tr>
-                        <td>{{saleitem.item}}</td>
+                        <td>{{saleitem.name}}</td>
                         <td>${{saleitem.price}}</td>
                         <!--only employees have permission to delete items-->
                         {% if is_employee %}

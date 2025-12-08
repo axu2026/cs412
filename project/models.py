@@ -18,7 +18,10 @@ class Customer(models.Model):
     address = models.CharField(max_length=128)
     phone_number = models.CharField(max_length=10)
     email = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_dependent = models.BooleanField(default=False)
+    guardian = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         """return the string representation of the customer"""
@@ -27,19 +30,6 @@ class Customer(models.Model):
     def get_absolute_url(self):
         """return the url path to a particular customer model"""
         return reverse('customer', kwargs={'pk':self.pk})
-
-
-class Dependent(models.Model):
-    """defines the dependent model with its fields and methods"""
-
-    first_name = models.CharField(max_length=64)
-    last_name = models.CharField(max_length=64)
-    date_of_birth = models.DateField()
-    guardian = models.ForeignKey(Customer, on_delete=models.CASCADE)
-
-    def __str__(self):
-        """return the string representation of the dependent"""
-        return f'{self.first_name} {self.last_name}'
 
 
 class Employee(models.Model):
@@ -59,7 +49,7 @@ class Sale(models.Model):
     """defines the sale model with its fields and methods"""
 
     created_at = models.DateTimeField(auto_now_add=True)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     amount_paid = models.DecimalField(max_digits=8, decimal_places=2)
 
@@ -80,6 +70,10 @@ class Sale(models.Model):
             
         # otherwise, return 0
         return Decimal('0.00')
+    
+    def get_absolute_url(self):
+        """return the url path to a particular customer model"""
+        return reverse('sale', kwargs={'pk':self.pk})
 
 
 class Item(models.Model):
@@ -97,10 +91,10 @@ class SaleItem(models.Model):
     """saleitem model to tie the sale and item tables"""
 
     sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=128)
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    description = models.TextField()
 
     def __str__(self):
         """return the string representation of saleitem"""
-        return f'{self.item} to {self.sale}'
+        return f'{self.name} to {self.sale}'

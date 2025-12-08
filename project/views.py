@@ -87,7 +87,7 @@ class CustomerListView(LoginRequiredMixin, ListView):
                     Q(email__icontains=query)
                 ).distinct()
 
-        return qs
+        return qs.order_by('-created_at').filter(is_dependent=False)
 
     def get_login_url(self):
         """redirect to the log in page"""
@@ -127,8 +127,15 @@ class CustomerDetailView(LoginRequiredMixin, DetailView):
         # get the parent context and add in the dependents and sales
         context = super().get_context_data(**kwargs)
         customer = Customer.objects.get(pk=self.kwargs['pk'])
-        context['dependents'] = Dependent.objects.filter(guardian=customer)
-        context['sales'] = Sale.objects.filter(customer=customer)
+        context['dependents'] = Customer.objects.filter(guardian=customer, is_dependent=True)
+        context['sales'] = Sale.objects.filter(customer=customer).order_by('-created_at')
+        context['is_employee'] = Employee.objects.filter(user=self.request.user).exists()
+
+        # return list of sales accordingly
+        if customer.is_dependent:
+            context['sales'] = Sale.objects.filter(customer=customer.guardian).order_by('-created_at')
+        else:
+            context['sales'] = Sale.objects.filter(customer=customer).order_by('-created_at')
 
         return context
     
@@ -137,7 +144,7 @@ class CustomerCreateView(CreateView):
     """view to create a customer account"""
 
     form_class = CreateCustomerForm
-    template_name = 'project/create_customer.html'
+    template_name = 'project/customer_create.html'
 
     def get_context_data(self, **kwargs):
         """provides context for a second form to create a user"""
@@ -167,7 +174,7 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
     """view to update a customer model"""
 
     form_class = CreateCustomerForm
-    template_name = "project/update_customer.html"
+    template_name = "project/customer_update.html"
     model = Customer
 
     def dispatch(self, request, *args, **kwargs):
@@ -191,6 +198,142 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
         return reverse('login')
     
 
+class DependentCreateView(LoginRequiredMixin, CreateView):
+    """view to create a customer dependent"""
+
+    form_class = CreateDependentForm
+    template_name = 'project/dependent_create.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        """verify the user has permission to view this"""
+
+        # check if the user is authenticated
+        if request.user.is_authenticated:
+            # the customer of the current page
+            customer = Customer.objects.get(pk=kwargs['pk'])
+
+            # if the user is an employee or is the user of the page, allow to view
+            if (Employee.objects.filter(user=self.request.user).exists()
+                or customer.user == self.request.user):
+                return super().dispatch(request, *args, **kwargs)
+                
+        # else, no permission
+        return render(request, "project/no_permission.html")
+
+    def get_login_url(self):
+        """redirect to the log in page"""
+        return reverse('login')
+
+    def get_context_data(self, **kwargs):
+        """provides context for creating a new dependent"""
+
+        # get context and put the guardian
+        context = super().get_context_data(**kwargs)
+        context['guardian'] = Customer.objects.get(pk=self.kwargs['pk'])
+
+        return context
+
+    def get_success_url(self):
+        """return back to the guardian's page"""
+        return reverse('customer', kwargs={'pk': self.kwargs['pk']})
+
+    def form_valid(self, form):
+        """insert information from guardian"""
+
+        # find guardian and auto fill everything
+        guardian = Customer.objects.get(pk=self.kwargs['pk'])
+        form.instance.guardian = guardian
+        form.instance.is_dependent = True
+        form.instance.address = guardian.address
+        form.instance.phone_number = guardian.phone_number
+        form.instance.email = guardian.email
+
+        return super().form_valid(form)
+
+
+class DependentUpdateView(LoginRequiredMixin, UpdateView):
+    """view to update a customer dependent"""
+
+    form_class = CreateDependentForm
+    template_name = 'project/dependent_update.html'
+    model = Customer
+
+    def dispatch(self, request, *args, **kwargs):
+        """verify the user has permission to view this"""
+
+        # check if the user is authenticated
+        if request.user.is_authenticated:
+            # the customer of the current page
+            dependent = Customer.objects.get(pk=kwargs['pk'])
+
+            # if the user is an employee or is the user of the page, allow to view
+            if (Employee.objects.filter(user=self.request.user).exists()
+                or dependent.guardian.user == self.request.user):
+                return super().dispatch(request, *args, **kwargs)
+                
+        # else, no permission
+        return render(request, "project/no_permission.html")
+
+    def get_login_url(self):
+        """redirect to the log in page"""
+        return reverse('login')
+
+    def get_success_url(self):
+        """return back to the guardian's page"""
+        dependent = Customer.objects.get(pk=self.kwargs['pk'])
+        return reverse('customer', kwargs={'pk': dependent.guardian.pk})
+
+    def get_context_data(self, **kwargs):
+        """provides context for updating a dependent"""
+
+        # get context and put guardian and dependent in
+        context = super().get_context_data(**kwargs)
+        context['dependent'] = Customer.objects.get(pk=self.kwargs['pk'])
+
+        return context
+
+
+class DependentDeleteView(LoginRequiredMixin, DeleteView):
+    """view to delete a customer dependent"""
+
+    model = Customer
+    template_name = 'project/dependent_delete.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        """verify the user has permission to view this"""
+
+        # check if the user is authenticated
+        if request.user.is_authenticated:
+            # the customer of the current page
+            dependent = Customer.objects.get(pk=kwargs['pk'])
+
+            # if the user is an employee or is the user of the page, allow to view
+            if (Employee.objects.filter(user=self.request.user).exists()
+                or dependent.guardian.user == self.request.user):
+                return super().dispatch(request, *args, **kwargs)
+                
+        # else, no permission
+        return render(request, "project/no_permission.html")
+
+    def get_login_url(self):
+        """redirect to the log in page"""
+        return reverse('login')
+    
+    def get_success_url(self):
+        """return back to the guardian's page"""
+        dependent = Customer.objects.get(pk=self.kwargs['pk'])
+        return reverse('customer', kwargs={'pk': dependent.guardian.pk})
+
+    def get_context_data(self, **kwargs):
+        """provides context for updating a dependent"""
+
+        # get context and put guardian and dependent in
+        context = super().get_context_data(**kwargs)
+        context['dependent'] = Customer.objects.get(pk=self.kwargs['pk'])
+
+        return context
+
+
 class CustomLoginView(LoginView):
     """custom loginview for custom redirect"""
 
@@ -213,138 +356,7 @@ class CustomLoginView(LoginView):
                 return reverse('customer', kwargs={"pk": c.pk})
 
         return reverse('home')
-
-
-class DependentCreateView(LoginRequiredMixin, CreateView):
-    """view to create a new dependent"""
-
-    form_class = CreateDependentForm
-    template_name = "project/create_dependent.html"
-    model = Dependent
-
-    def dispatch(self, request, *args, **kwargs):
-        """verify the user has permission to view this"""
-
-        # check if the user is authenticated
-        if request.user.is_authenticated:
-            # the customer of the current page
-            customer = Customer.objects.get(pk=kwargs['pk'])
-
-            # if the user is an employee or is the user of the page, allow to view
-            if (Employee.objects.filter(user=self.request.user).exists()
-                or customer.user == self.request.user):
-                return super().dispatch(request, *args, **kwargs)
-                
-        # else, no permission
-        return render(request, "project/no_permission.html")
-
-    def get_login_url(self):
-        """redirect to the log in page"""
-        return reverse('login')
-    
-    def get_context_data(self, **kwargs):
-        """get the context data for creating a dependent"""
-
-        context = super().get_context_data(**kwargs)
-        context['customer'] = Customer.objects.get(pk=self.kwargs['pk'])
-
-        return context
-    
-    def form_valid(self, form):
-        """inject the customer guardian into dependent form"""
-
-        guardian = Customer.objects.get(pk=self.kwargs['pk'])
-        form.instance.guardian = guardian
-
-        return super().form_valid(form)
-    
-    def get_success_url(self):
-        """return back to customer page"""
-        return reverse('customer', kwargs={'pk':self.kwargs['pk']})
-    
-
-class DependentUpdateView(LoginRequiredMixin, UpdateView):
-    """view to update a dependent"""
-
-    form_class = CreateDependentForm
-    template_name = "project/update_dependent.html"
-    model = Dependent
-
-    def dispatch(self, request, *args, **kwargs):
-        """verify the user has permission to view this"""
-
-        # check if the user is authenticated
-        if request.user.is_authenticated:
-            # the guardian of the dependent
-            dependent = Dependent.objects.get(pk=kwargs['pk'])
-            customer = Customer.objects.get(pk=dependent.guardian.pk)
-
-            # if the user is an employee or is the user of the page, allow to view
-            if (Employee.objects.filter(user=self.request.user).exists()
-                or customer.user == self.request.user):
-                return super().dispatch(request, *args, **kwargs)
-                
-        # else, no permission
-        return render(request, "project/no_permission.html")
-
-    def get_login_url(self):
-        """redirect to the log in page"""
-        return reverse('login')
-    
-    def get_context_data(self, **kwargs):
-        """get the context data for updating a dependent"""
-
-        context = super().get_context_data(**kwargs)
-        context['dependent'] = Dependent.objects.get(pk=self.kwargs['pk'])
-
-        return context
-    
-    def get_success_url(self):
-        """return back to customer page"""
-        dependent = Dependent.objects.get(pk=self.kwargs['pk'])
-        return reverse('customer', kwargs={'pk':dependent.guardian.pk})
-    
-
-class DependentDeleteView(LoginRequiredMixin, DeleteView):
-    """view to delete a dependent"""
-
-    template_name = "project/delete_dependent.html"
-    model = Dependent
-
-    def dispatch(self, request, *args, **kwargs):
-        """verify the user has permission to view this"""
-
-        # check if the user is authenticated
-        if request.user.is_authenticated:
-            # the guardian of the dependent
-            dependent = Dependent.objects.get(pk=kwargs['pk'])
-            customer = Customer.objects.get(pk=dependent.guardian.pk)
-
-            # if the user is an employee or is the user of the page, allow to view
-            if (Employee.objects.filter(user=self.request.user).exists()
-                or customer.user == self.request.user):
-                return super().dispatch(request, *args, **kwargs)
-                
-        # else, no permission
-        return render(request, "project/no_permission.html")
-
-    def get_login_url(self):
-        """redirect to the log in page"""
-        return reverse('login')
-    
-    def get_context_data(self, **kwargs):
-        """get the context data for updating a dependent"""
-
-        context = super().get_context_data(**kwargs)
-        context['dependent'] = Dependent.objects.get(pk=self.kwargs['pk'])
-
-        return context
-    
-    def get_success_url(self):
-        """return back to customer page"""
-        dependent = Dependent.objects.get(pk=self.kwargs['pk'])
-        return reverse('customer', kwargs={'pk':dependent.guardian.pk})
-    
+   
 
 class SaleDetailView(LoginRequiredMixin, DetailView):
     """view to see sale details"""
@@ -352,6 +364,10 @@ class SaleDetailView(LoginRequiredMixin, DetailView):
     template_name = "project/sale_detail.html"
     model = Sale
     context_object_name = "sale"
+
+    def get_login_url(self):
+        """redirect to the log in page"""
+        return reverse('login')
 
     def dispatch(self, request, *args, **kwargs):
         """verify the user has permission to view this"""
@@ -377,6 +393,7 @@ class SaleDetailView(LoginRequiredMixin, DetailView):
         context['form'] = AddPaymentForm()
         sale = Sale.objects.get(pk=self.kwargs['pk'])
         context['total'] = sale.get_total_price()
+        context['saleitems'] = SaleItem.objects.filter(sale=sale)
 
         # find the balance to display it
         context['balance'] = context['total'] - sale.amount_paid
@@ -404,13 +421,60 @@ class SaleDetailView(LoginRequiredMixin, DetailView):
             sale.save()
 
         return HttpResponseRedirect(reverse('sale', kwargs={'pk':self.kwargs['pk']}))
+
+
+class SaleCreateView(LoginRequiredMixin, CreateView):
+    """view to confirm creating a sale"""
+
+    form_class = CreateSaleForm
+    template_name = "project/sale_create.html"
+    model = Sale
+
+    def dispatch(self, request, *args, **kwargs):
+        """check if the user is an employee so that creation is allowed"""
+
+        customer = Customer.objects.get(pk=self.kwargs['pk'])
+
+        # cant make sales with a dependent
+        if customer.is_dependent:
+            return render(request, "project/no_permission.html")
+
+        # if the user is authenticated,
+        if request.user.is_authenticated:
+            # and the user is an employee,
+            if Employee.objects.filter(user=self.request.user).exists():
+                return super().dispatch(request, *args, **kwargs)
+
+        # permission denied 
+        return render(request, "project/no_permission.html")
+
+    def get_login_url(self):
+        """redirect to the log in page"""
+        return reverse('login')
+
+    def get_context_data(self, **kwargs):
+        """find customer and put into context"""
+
+        context = super().get_context_data(**kwargs)
+        context["customer"] = Customer.objects.get(pk=self.kwargs['pk'])
+
+        return context
+    
+    def form_valid(self, form):
+        """inject the customer and employee into the form"""
+
+        form.instance.customer = Customer.objects.get(pk=self.kwargs['pk'])
+        form.instance.employee = Employee.objects.get(user=self.request.user)
+        form.instance.amount_paid = Decimal('0.00')
+
+        return super().form_valid(form)
     
 
 class SaleItemCreateView(LoginRequiredMixin, CreateView):
     """view to create a saleitem"""
 
     form_class = CreateSaleItemForm
-    template_name = "project/create_saleitem.html"
+    template_name = "project/saleitem_create.html"
     model = SaleItem
 
     def dispatch(self, request, *args, **kwargs):
@@ -451,6 +515,7 @@ class SaleItemCreateView(LoginRequiredMixin, CreateView):
         form.instance.sale = sale
         form.instance.item = item
         form.instance.price = item.price
+        form.instance.name = item.name
 
         return super().form_valid(form)
     
@@ -462,7 +527,7 @@ class SaleItemCreateView(LoginRequiredMixin, CreateView):
 class SaleItemDeleteView(LoginRequiredMixin, DeleteView):
     """view to delete a saleitem from a sale"""
 
-    template_name = "project/delete_saleitem.html"
+    template_name = "project/saleitem_delete.html"
     model = SaleItem
 
     def dispatch(self, request, *args, **kwargs):
@@ -498,3 +563,124 @@ class SaleItemDeleteView(LoginRequiredMixin, DeleteView):
         context['saleitem'] = SaleItem.objects.get(pk=self.kwargs['pk'])
 
         return context
+    
+
+class ItemDeleteView(LoginRequiredMixin, DeleteView):
+    """view to delete an item"""
+
+    template_name = "project/item_delete.html"
+    model = Item
+
+    def dispatch(self, request, *args, **kwargs):
+        """verify the user has permission to view this"""
+
+        # check if the user is authenticated
+        if request.user.is_authenticated:
+            # if the user is an employee, allow to view
+            if Employee.objects.filter(user=self.request.user).exists():
+                return super().dispatch(request, *args, **kwargs)
+        
+        # no permission
+        return render(request, "project/no_permission.html")
+    
+    def get_login_url(self):
+        """redirect to the log in page"""
+        return reverse('login')
+    
+    def get_success_url(self):
+        """return back to home page"""
+        return reverse('items')
+
+
+class ItemCreateView(LoginRequiredMixin, CreateView):
+    """the view for creating a new item"""
+
+    form_class = CreateItemForm
+    template_name = "project/item_create.html"
+    model = Item
+
+    def dispatch(self, request, *args, **kwargs):
+        """verify the user has permission to view this"""
+
+        # check if the user is authenticated
+        if request.user.is_authenticated:
+            # if the user is an employee, allow to view
+            if Employee.objects.filter(user=self.request.user).exists():
+                return super().dispatch(request, *args, **kwargs)
+        
+        # no permission
+        return render(request, "project/no_permission.html")
+    
+    def get_login_url(self):
+        """redirect to the log in page"""
+        return reverse('login')
+    
+    def get_success_url(self):
+        """return back to home page"""
+        return reverse('items')
+    
+
+class ItemUpdateView(LoginRequiredMixin, UpdateView):
+    """view to update an item"""
+
+    form_class = CreateItemForm
+    template_name = 'project/item_update.html'
+    model = Item
+
+    def dispatch(self, request, *args, **kwargs):
+        """verify the user has permission to view this"""
+
+        # check if the user is authenticated
+        if request.user.is_authenticated:
+            # if the user is an employee, allow to view
+            if Employee.objects.filter(user=self.request.user).exists():
+                return super().dispatch(request, *args, **kwargs)
+        
+        # no permission
+        return render(request, "project/no_permission.html")
+    
+    def get_login_url(self):
+        """redirect to the log in page"""
+        return reverse('login')
+    
+    def get_success_url(self):
+        """return back to home page"""
+        return reverse('items')
+    
+    def get_context_data(self, **kwargs):
+        """provides context for updating an item"""
+
+        # get context and put guardian and dependent in
+        context = super().get_context_data(**kwargs)
+        context['item'] = Item.objects.get(pk=self.kwargs['pk'])
+
+        return context
+
+
+class ItemListView(LoginRequiredMixin, ListView):
+    """the view to see all items"""
+
+    model = Item
+    template_name = "project/item_list.html"
+    context_object_name = "items"
+
+    def dispatch(self, request, *args, **kwargs):
+        """verify the user has permission to view this"""
+
+        # check if the user is authenticated and is not a staff member
+        if request.user.is_authenticated:
+            if not Employee.objects.filter(user=self.request.user).exists():
+                return render(request, "project/no_permission.html")
+        
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_login_url(self):
+        """redirect to the log in page"""
+        return reverse('login')
+
+
+class CustomerCreateAPIView(generics.CreateAPIView):
+    """view for the customer api"""
+
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer

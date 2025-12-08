@@ -1,0 +1,20 @@
+<!--project/item_create.html-->
+<!--Aidan Xu (axu26@bu.edu) 12/8/25-->
+<!--template to create an item-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Add Item</h1>
+    <!--form to create an item-->
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Create">
+    </form>
+    <!--provide a cancel option-->
+    <a href="{% url 'items' %}">
+        Go back
+    </a>
+{% endblock %}

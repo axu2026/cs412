@@ -1,0 +1,20 @@
+<!--project/dependent_update.html-->
+<!--Aidan Xu (axu26@bu.edu) 12/8/25-->
+<!--template to provide form to update a customer dependent-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Updating {{dependent}}</h1>
+    <!--form to create a dependent-->
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Update">
+    </form>
+    <br>
+    <a href="{% url 'customer' dependent.guardian.pk %}">
+        Go back
+    </a>
+{% endblock %}
