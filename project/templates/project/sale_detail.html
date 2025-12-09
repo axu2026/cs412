@@ -17,7 +17,7 @@
                 <tr>
                     <th>Customer:</th>
                     <td>
-                        {% if customer %}
+                        {% if sale.customer %}
                             <a href="{% url 'customer' sale.customer.pk %}">
                                 {{sale.customer}}
                             </a>

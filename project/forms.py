@@ -85,15 +85,22 @@ class CreateSaleItemForm(forms.ModelForm):
         fields = ['customer']
 
     def __init__(self, *args, sale=None, item=None, **kwargs):
+        """store info in the form"""
+
         super().__init__(*args, **kwargs)
         self.sale = sale
         self.item = item
 
-        if sale and sale.customer:
-            self.fields['customer'].queryset = Customer.objects.filter(
-                Q(guardian=sale.customer) | Q(pk=sale.customer.pk)
-            )
+        # if we have a sale and the customer exists, find dependents, else nothing
+        if sale:
+            if sale.customer:
+                self.fields['customer'].queryset = Customer.objects.filter(
+                    Q(guardian=sale.customer) | Q(pk=sale.customer.pk)
+                )
+            else:
+                self.fields['customer'].queryset = Customer.objects.none()
 
+        # if we dont have a customer reliant item, make it not required
         if item and not item.needs_customer:
             self.fields['customer'].required = False
 

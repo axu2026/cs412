@@ -79,8 +79,12 @@ class CustomerListView(LoginRequiredMixin, ListView):
             # check if query is not null
             if query:
                 name = query.split()
-                first = name[0]
-                last = name[-1]
+                first = ''
+                last = ''
+                # avoid nil indexing
+                if len(name) > 0:
+                    first = name[0]
+                    last = name[-1]
 
                 # apply the filters inclusively
                 qs = qs.filter(
@@ -789,13 +793,6 @@ class ItemListView(LoginRequiredMixin, ListView):
         return reverse('login')
 
 
-class CustomerCreateAPIView(generics.CreateAPIView):
-    """view for the customer api"""
-
-    queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
-
-
 class StatisticsView(ListView):
     """view for seeing statistics"""
 
@@ -900,3 +897,18 @@ class StatisticsView(ListView):
         context['graph_pie'] = graph_pie
 
         return context
+    
+
+# API
+class CustomerCreateAPIView(generics.CreateAPIView):
+    """view for the customer api"""
+
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+
+
+class DependentCreateAPIView(generics.CreateAPIView):
+    """view for the dependent api"""
+
+    queryset = Customer.objects.all()
+    serializer_class = DependentSerializer
