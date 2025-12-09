@@ -7,8 +7,8 @@
 
 {% block content %}
     <h1>Items</h1>
-    <a href="{% url 'create_item' %}">
-        Add an item
+    <a href="{% url 'create_item' %}" class="btn">
+        Add Item
     </a>
     <table>
         <tr>
@@ -21,7 +21,7 @@
             <tr>
                 <td>{{item.name}}</td>
                 <td>${{item.price}}</td>
-                <td>
+                <td class="actions">
                     <a href="{% url 'update_item' item.pk %}">
                         Edit
                     </a>

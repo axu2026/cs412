@@ -67,6 +67,7 @@
                 </tr>
             </table>
         </div>
+        <div class="vr"></div>
         <!--provide employee actions if the current user is an employee-->
         {% if is_employee %}
             <div>
@@ -75,7 +76,8 @@
                 <form method="POST">
                     {% csrf_token %}
                     {{form}}
-                    <input type="submit">
+                    <br>
+                    <input type="submit" class="btn">
                 </form>
                 <h3>Add Items</h3>
                 <table>

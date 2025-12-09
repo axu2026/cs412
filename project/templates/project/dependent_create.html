@@ -11,10 +11,11 @@
     <form method="POST">
         {% csrf_token %}
         {{form}}
-        <input type="submit" value="Add">
+        <br>
+        <input type="submit" value="Add" class="btn">
     </form>
     <br>
-    <a href="{% url 'customer' guardian.pk %}">
-        Go back
+    <a href="{% url 'customer' guardian.pk %}" class="btn">
+        Go Back
     </a>
 {% endblock %}

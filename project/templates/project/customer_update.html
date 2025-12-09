@@ -11,10 +11,12 @@
     <form method="POST">
         {% csrf_token %}
         {{form}}
-        <input type="submit" value="Update" class="button">
+        <br>
+        <input type="submit" value="Update" class="btn">
     </form>
+    <br>
     <!--provide cancel option-->
-    <a href="{% url 'customer' customer.pk %}">
-        Go back
+    <a href="{% url 'customer' customer.pk %}" class="btn">
+        Go Back
     </a>
 {% endblock %}

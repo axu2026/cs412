@@ -10,10 +10,11 @@
     <!--form to confirm deletion of saleitem-->
     <form method="POST">
         {% csrf_token %}
-        <input type="submit" value="Yes">
+        <input type="submit" value="Yes" class="btn">
     </form>
+    <br>
     <!--provide cancel option-->
-    <a href="{% url 'sale' saleitem.sale.pk %}">
-        Cancel and go back
+    <a href="{% url 'sale' saleitem.sale.pk %}" class="btn">
+        Go Back
     </a>
 {% endblock %}

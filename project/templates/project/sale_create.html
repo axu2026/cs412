@@ -10,10 +10,11 @@
     <!--form to create a sale-->
     <form method="POST">
         {% csrf_token %}
-        <input type="submit" value="Yes">
+        <input type="submit" value="Yes" class="btn">
     </form>
+    <br>
     <!--provide a cancel option-->
-    <a href="{% url 'customer' customer.pk %}">
+    <a href="{% url 'customer' customer.pk %}" class="btn">
         Cancel
     </a>
 {% endblock %}

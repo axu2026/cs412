@@ -7,20 +7,22 @@
 
 {% block content %}
     <h1>Create an account</h1>
+    <h3>Personal Information</h3>
     <!--form to create a user and customer account-->
     <form method="POST">
         {% csrf_token %}
         {{form_user}}
-        <h3>Personal Information</h3>
         {{form}}
-        <input type="submit" value="Create account">
+        <br>
+        <input type="submit" value="Create account" class="btn">
     </form>
+    <br>
     <!--provide alternate options-->
-    <a href="{% url 'login' %}">
-        Log in to an existing account
+    <a href="{% url 'login' %}" class="btn">
+        Log in to Existing Account
     </a>
     <br>
-    <a href="{% url 'home' %}">
-        Go back home
+    <a href="{% url 'home' %}" class="btn">
+        Go Back
     </a>
 {% endblock %}
