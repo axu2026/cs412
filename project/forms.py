@@ -6,6 +6,7 @@ from django import forms
 from .models import *
 from datetime import datetime
 from decimal import Decimal
+from django.db.models import Q
 
 class AddPaymentForm(forms.Form):
     """a form to add payment to a sale"""
@@ -23,6 +24,7 @@ class GetDatesForm(forms.Form):
     single_date = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date'})
     )
+
 
 class CreateCustomerForm(forms.ModelForm):
     """the form to create a new customer account"""
@@ -80,7 +82,32 @@ class CreateSaleItemForm(forms.ModelForm):
     class Meta:
         """tie the form to the saleitem model"""
         model = SaleItem
-        fields = []
+        fields = ['customer']
+
+    def __init__(self, *args, sale=None, item=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.sale = sale
+        self.item = item
+
+        if sale and sale.customer:
+            self.fields['customer'].queryset = Customer.objects.filter(
+                Q(guardian=sale.customer) | Q(pk=sale.customer.pk)
+            )
+
+        if item and not item.needs_customer:
+            self.fields['customer'].required = False
+
+    def clean(self):
+        """validate that there is a customer in a customer required item"""
+
+        cleaned_data = super().clean()
+        customer = cleaned_data.get('customer')
+
+        # check if the item needs a customer and if there isnt one
+        if self.item and self.item.needs_customer and not customer:
+            raise forms.ValidationError("Please select a customer!")
+        
+        return cleaned_data
 
 
 class CreateSaleForm(forms.ModelForm):
@@ -98,4 +125,4 @@ class CreateItemForm(forms.ModelForm):
     class Meta:
         """tie the form to the item model"""
         model = Item
-        fields = ['name', 'price']
+        fields = ['name', 'price', 'needs_customer']

@@ -81,6 +81,7 @@ class Item(models.Model):
 
     name = models.CharField(max_length=128)
     price = models.DecimalField(max_digits=8, decimal_places=2)
+    needs_customer = models.BooleanField(default=False)
 
     def __str__(self):
         """return the string representation of an item"""
@@ -94,6 +95,7 @@ class SaleItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=128)
     price = models.DecimalField(max_digits=8, decimal_places=2)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         """return the string representation of saleitem"""

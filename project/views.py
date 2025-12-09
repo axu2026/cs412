@@ -38,6 +38,7 @@ class HomeTemplateView(TemplateView):
             employee = Employee.objects.filter(user=self.request.user)
             if employee:
                 context['employee'] = employee.first()
+                context['is_manager'] = context['employee'].is_manager
             
             # if the user is a customer, find the customer model
             customer = Customer.objects.filter(user=self.request.user)
@@ -362,6 +363,52 @@ class CustomLoginView(LoginView):
         return reverse('home')
    
 
+class SaleListView(LoginRequiredMixin, ListView):
+    """list to see all events"""
+
+    model = Sale
+    template_name = "project/sale_list.html"
+    context_object_name = "sales"
+    paginate_by = 10
+
+    def dispatch(self, request, *args, **kwargs):
+        """verify the user has permission to view this"""
+
+        # check if the user is authenticated and is not a staff member
+        if request.user.is_authenticated:
+            if not Employee.objects.filter(user=self.request.user).exists():
+                return render(request, "project/no_permission.html")
+        
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        """apply filters before returning the queryset"""
+
+        qs = super().get_queryset()
+
+        # filter the queryset according to the search query
+        # check if query is in the get request
+        if 'query' in self.request.GET:
+            query = self.request.GET['query']
+
+            # check if query is not null
+            if query:
+                filter = Q(customer__first_name__icontains=query) | Q(customer__last_name__icontains=query)
+
+                # if query is a number, find id
+                if query.isdigit():
+                    filter |= Q(pk=int(query))
+
+                # apply the filters inclusively
+                qs = qs.filter(filter).distinct()
+
+        return qs.order_by('-created_at')
+
+    def get_login_url(self):
+        """redirect to the log in page"""
+        return reverse('login')
+
+
 class SaleDetailView(LoginRequiredMixin, DetailView):
     """view to see sale details"""
 
@@ -380,11 +427,17 @@ class SaleDetailView(LoginRequiredMixin, DetailView):
         if request.user.is_authenticated:
             # get the sale and the customer of the sale
             sale = Sale.objects.get(pk=kwargs['pk'])
-            customer = Customer.objects.get(pk=sale.customer.pk)
+
+            # check if the sale has a customer
+            if sale.customer:
+                customer = Customer.objects.filter(pk=sale.customer.pk)
+
+                # if so, check for permissions
+                if customer and customer.first().user == self.request.user:
+                    return super().dispatch(request, *args, **kwargs)
 
             # if the user is an employee or is the user of the page, allow to view
-            if (Employee.objects.filter(user=self.request.user).exists()
-                or customer.user == self.request.user):
+            if Employee.objects.filter(user=self.request.user).exists():
                 return super().dispatch(request, *args, **kwargs)
                 
         # else, no permission
@@ -480,6 +533,38 @@ class SaleCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
     
 
+class SaleOpenCreateView(LoginRequiredMixin, CreateView):
+    """view to confirm creating a sale"""
+
+    form_class = CreateSaleForm
+    template_name = "project/sale_create_open.html"
+    model = Sale
+
+    def dispatch(self, request, *args, **kwargs):
+        """check if the user is an employee so that creation is allowed"""
+
+        # if the user is authenticated,
+        if request.user.is_authenticated:
+            # and the user is an employee,
+            if Employee.objects.filter(user=self.request.user).exists():
+                return super().dispatch(request, *args, **kwargs)
+
+        # permission denied 
+        return render(request, "project/no_permission.html")
+
+    def get_login_url(self):
+        """redirect to the log in page"""
+        return reverse('login')
+    
+    def form_valid(self, form):
+        """inject the customer and employee into the form"""
+
+        form.instance.employee = Employee.objects.get(user=self.request.user)
+        form.instance.amount_paid = Decimal('0.00')
+
+        return super().form_valid(form)
+
+
 class SaleItemCreateView(LoginRequiredMixin, CreateView):
     """view to create a saleitem"""
 
@@ -490,19 +575,12 @@ class SaleItemCreateView(LoginRequiredMixin, CreateView):
     def dispatch(self, request, *args, **kwargs):
         """verify the user has permission to view this"""
 
-        # check if the user is authenticated
+        # check if the user is authenticated and is not a staff member
         if request.user.is_authenticated:
-            # get the sale and the customer of the sale
-            sale = Sale.objects.get(pk=kwargs['pk'])
-            customer = Customer.objects.get(pk=sale.customer.pk)
-
-            # if the user is an employee or is the user of the page, allow to view
-            if (Employee.objects.filter(user=self.request.user).exists()
-                or customer.user == self.request.user):
-                return super().dispatch(request, *args, **kwargs)
-                
-        # else, no permission
-        return render(request, "project/no_permission.html")
+            if not Employee.objects.filter(user=self.request.user).exists():
+                return render(request, "project/no_permission.html")
+        
+        return super().dispatch(request, *args, **kwargs)
 
     def get_login_url(self):
         """redirect to the log in page"""
@@ -516,6 +594,18 @@ class SaleItemCreateView(LoginRequiredMixin, CreateView):
         context['sale'] = Sale.objects.get(pk=self.kwargs['pk'])
 
         return context
+    
+    def get_form_kwargs(self):
+        """provide the form with the sale and item"""
+
+        # find the sale and item and pass to form
+        kwargs = super().get_form_kwargs()
+        pk = self.kwargs.get('pk')
+        item_pk = self.kwargs.get('item_pk')
+        kwargs['sale'] = Sale.objects.get(id=pk)
+        kwargs['item'] = Item.objects.get(id=item_pk)
+
+        return kwargs
     
     def form_valid(self, form):
         """inject the item and sale into the form"""
@@ -543,19 +633,12 @@ class SaleItemDeleteView(LoginRequiredMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         """verify the user has permission to view this"""
 
-        # check if the user is authenticated
+        # check if the user is authenticated and is not a staff member
         if request.user.is_authenticated:
-            # get the sale and the customer of the sale
-            saleitem = SaleItem.objects.get(pk=kwargs['pk'])
-            customer = Customer.objects.get(pk=saleitem.sale.customer.pk)
-
-            # if the user is an employee or is the user of the page, allow to view
-            if (Employee.objects.filter(user=self.request.user).exists()
-                or customer.user == self.request.user):
-                return super().dispatch(request, *args, **kwargs)
-                
-        # else, no permission
-        return render(request, "project/no_permission.html")
+            if not Employee.objects.filter(user=self.request.user).exists():
+                return render(request, "project/no_permission.html")
+        
+        return super().dispatch(request, *args, **kwargs)
 
     def get_login_url(self):
         """redirect to the log in page"""
@@ -584,14 +667,15 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         """verify the user has permission to view this"""
 
-        # check if the user is authenticated
+        # check if the user is authenticated and is not a staff member
         if request.user.is_authenticated:
-            # if the user is an employee, allow to view
-            if Employee.objects.filter(user=self.request.user).exists():
-                return super().dispatch(request, *args, **kwargs)
+            employee = Employee.objects.filter(user=self.request.user)
+
+            # check for employee, if so check if they are a manager
+            if not employee or not employee.first().is_manager:
+                return render(request, "project/no_permission.html")
         
-        # no permission
-        return render(request, "project/no_permission.html")
+        return super().dispatch(request, *args, **kwargs)
     
     def get_login_url(self):
         """redirect to the log in page"""
@@ -612,14 +696,15 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
     def dispatch(self, request, *args, **kwargs):
         """verify the user has permission to view this"""
 
-        # check if the user is authenticated
+        # check if the user is authenticated and is not a staff member
         if request.user.is_authenticated:
-            # if the user is an employee, allow to view
-            if Employee.objects.filter(user=self.request.user).exists():
-                return super().dispatch(request, *args, **kwargs)
+            employee = Employee.objects.filter(user=self.request.user)
+
+            # check for employee, if so check if they are a manager
+            if not employee or not employee.first().is_manager:
+                return render(request, "project/no_permission.html")
         
-        # no permission
-        return render(request, "project/no_permission.html")
+        return super().dispatch(request, *args, **kwargs)
     
     def get_login_url(self):
         """redirect to the log in page"""
@@ -640,14 +725,15 @@ class ItemUpdateView(LoginRequiredMixin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         """verify the user has permission to view this"""
 
-        # check if the user is authenticated
+        # check if the user is authenticated and is not a staff member
         if request.user.is_authenticated:
-            # if the user is an employee, allow to view
-            if Employee.objects.filter(user=self.request.user).exists():
-                return super().dispatch(request, *args, **kwargs)
+            employee = Employee.objects.filter(user=self.request.user)
+
+            # check for employee, if so check if they are a manager
+            if not employee or not employee.first().is_manager:
+                return render(request, "project/no_permission.html")
         
-        # no permission
-        return render(request, "project/no_permission.html")
+        return super().dispatch(request, *args, **kwargs)
     
     def get_login_url(self):
         """redirect to the log in page"""
@@ -679,7 +765,10 @@ class ItemListView(LoginRequiredMixin, ListView):
 
         # check if the user is authenticated and is not a staff member
         if request.user.is_authenticated:
-            if not Employee.objects.filter(user=self.request.user).exists():
+            employee = Employee.objects.filter(user=self.request.user)
+
+            # check for employee, if so check if they are a manager
+            if not employee or not employee.first().is_manager:
                 return render(request, "project/no_permission.html")
         
         return super().dispatch(request, *args, **kwargs)
@@ -718,7 +807,10 @@ class StatisticsView(ListView):
 
         # check if the user is authenticated and is not a staff member
         if request.user.is_authenticated:
-            if not Employee.objects.filter(user=self.request.user).exists():
+            employee = Employee.objects.filter(user=self.request.user)
+
+            # check for employee, if so check if they are a manager
+            if not employee or not employee.first().is_manager:
                 return render(request, "project/no_permission.html")
         
         return super().dispatch(request, *args, **kwargs)

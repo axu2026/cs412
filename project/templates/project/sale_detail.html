@@ -17,9 +17,13 @@
                 <tr>
                     <th>Customer:</th>
                     <td>
-                        <a href="{% url 'customer' sale.customer.pk %}">
-                            {{sale.customer}}
-                        </a>
+                        {% if customer %}
+                            <a href="{% url 'customer' sale.customer.pk %}">
+                                {{sale.customer}}
+                            </a>
+                        {% else %}
+                            None
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -38,7 +42,9 @@
                 <!--iterate through all saleitems in the sale-->
                 {% for saleitem in saleitems %}
                     <tr>
-                        <td>{{saleitem.name}}</td>
+                        <td>{{saleitem.name}} 
+                            {% if saleitem.customer %}for {{saleitem.customer}}{% endif %}
+                        </td>
                         <td>${{saleitem.price}}</td>
                         <!--only employees have permission to delete items-->
                         {% if is_employee %}

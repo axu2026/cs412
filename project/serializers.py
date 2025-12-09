@@ -34,3 +34,28 @@ class CustomerSerializer(serializers.ModelSerializer):
         customer.save()
 
         return customer
+    
+
+class DependentSerializer(serializers.ModelSerializer):
+    """create a serializer for dependent api"""
+
+    class Meta:
+        """tie serializer to the customer model"""
+        model = Customer
+        fields = [
+                'first_name',
+                'last_name', 
+                'date_of_birth', 
+                'address',
+                'phone_number',
+                'email'
+                'is_dependent'
+                'guardian',]
+        
+    def create(self, validated_data):
+        """to create a customer using the api"""
+
+        customer = Customer.objects.create(**validated_data)
+        customer.save()
+
+        return customer

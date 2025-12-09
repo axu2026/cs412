@@ -1,0 +1,61 @@
+<!--project/sale_list.html-->
+<!--Aidan Xu (axu26@bu.edu) 12/9/25-->
+<!--template to show the list of sales-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Search Sales</h1>
+    <!--search form-->
+    <form method="GET">
+        <input type="text" 
+            name="query" 
+            value="{{ request.GET.query|default:'' }}"
+            placeholder="Enter search query"
+        >
+        <input type="submit" class="btn">
+    </form>
+    <hr>
+    <div style="display: grid; grid-template-rows: auto auto;">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Created by</th>
+            </tr>
+            <!--loop through the sales to show info-->
+            {% for sale in sales %}
+                <tr>
+                    <td>
+                        <!--link to the sale-->
+                        <a href="{% url 'sale' sale.pk %}">
+                            {{sale.pk}}
+                        </a>
+                    </td>
+                    <td>{{sale.customer}}</td>
+                    <td>{{sale.created_at}}</td>
+                    <td>{{sale.employee}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <!--pagination-->
+        <div style="display: flex; justify-content: center;">
+            {% if is_paginated %}
+                <!--if there is a previous page, give option to go back-->
+                {% if page_obj.has_previous %}
+                    <!--this line is long, i cannot put newlines lest it breaks-->
+                    <!--make sure to pass all parameters in request.GET into url-->
+                    <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{key}}={{value|urlencode}}{% endif %}{% endfor %}">←</a>
+                {% endif %}
+                <span>{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+                <!--if there is a next page, give option to go next-->
+                {% if page_obj.has_next %}
+                    <!--make sure to pass all parameters in request.GET into url-->
+                    <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{key}}={{value|urlencode}}{% endif %}{% endfor %}">→</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

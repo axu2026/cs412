@@ -36,15 +36,24 @@
         <!--provide employee navigation if there is an employee user-->
         {% if employee %}
             <h3>Employee Navigation</h3>
+            <a href="{% url 'create_sale_open' %}" class="btn">
+                Open Sale
+            </a>
+            <a href="{% url 'sales' %}" class="btn">
+                Sale List
+            </a>
             <a href="{% url 'customers' %}" class="btn">
                 Find Customer
             </a>
-            <a href="{% url 'items' %}" class="btn">
-                Manage Items
-            </a>
-            <a href="{% url 'statistics' %}" class="btn">
-                View Statistics
-            </a>
+            <!--manager only access-->
+            {% if is_manager %}
+                <a href="{% url 'items' %}" class="btn">
+                    Manage Items
+                </a>
+                <a href="{% url 'statistics' %}" class="btn">
+                    View Statistics
+                </a>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

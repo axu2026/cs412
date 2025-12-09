@@ -1,0 +1,21 @@
+<!--project/sale_create_open.html-->
+<!--Aidan Xu (axu26@bu.edu) 12/9/25-->
+<!--template to create an open sale-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="formcenter">
+        <h1>Create an open sale?</h1>
+        <!--form to create a sale-->
+        <form method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Yes" class="btn">
+            <!--provide a cancel option-->
+            <a href="{% url 'home' %}" class="btn">
+                Cancel
+            </a>
+        </form>
+    </div>
+{% endblock %}

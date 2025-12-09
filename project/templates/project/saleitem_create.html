@@ -11,7 +11,10 @@
         <!--form to create a saleitem-->
         <form method="POST">
             {% csrf_token %}
-            {{form}}
+            <!--check if we need a customer-->
+            {% if item.needs_customer %}
+                {{form}}
+            {% endif %}
             <br>
             <input type="submit" value="Yes" class="btn">
             <!--provide a cancel option-->
