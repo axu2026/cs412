@@ -12,7 +12,7 @@
         <form method="POST">
             {% csrf_token %}
             {{form}}
-            <br>
+            <br><br>
             <input type="submit" value="Update" class="btn">
             <!--provide cancel option-->
             <a href="{% url 'customer' customer.pk %}" class="btn">

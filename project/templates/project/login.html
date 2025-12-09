@@ -11,7 +11,7 @@
         <form action="{% url 'login' %}" method="POST">
             {% csrf_token %}
             {{form}}
-            <br>
+            <br><br>
             <input type="submit" value="Log In" class="btn">
             <!--check if there is an existing redirect-->
             {% if request.GET.next %}
