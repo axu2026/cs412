@@ -15,11 +15,12 @@ header {
     grid-template-columns: auto auto;
     background-color: greenyellow;
     padding: 1em;
+    border-bottom: 1px solid black;
 }
 
 header a {
     display: inline-block;
-    margin-right: 1em;
+    margin-right: 2em;
 }
 
 header a img {
@@ -33,10 +34,9 @@ footer {
 }
 
 form {
-    max-width: 600px;
     margin: 0;
     background: white;
-    padding: 1em 1em;
+    padding: 1em 4em;
     border-style: solid;
     border-width: 1px;
 }
@@ -46,6 +46,30 @@ form label {
     display: block;
     font-weight: bold;
     margin-bottom: 6px;
+}
+
+form.logout {
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+form.sale input {
+    display: inline-block;
+}
+
+form.sale label {
+    margin: 0;
+    display: inline-block;
+}
+
+form.sale .btn {
+    display: inline-block;
+}
+
+form.sale {
+    padding: 8px;
 }
 
 th, td {
@@ -97,6 +121,64 @@ table tr:nth-child(even) {
 .content {
     flex-grow: 1;
     margin: 1em;
+}
+
+.fig {
+    width: 100%;
+    min-width: 600px;
+    min-height: 400px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.formcenter {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.headerinfo {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-weight: bold;
+    font-size: large;
+    height: 100%;
+}
+
+.headerinfo a {
+    color: black;
+    text-decoration: none;
+    transition: transform 0.2s;
+}
+
+.headerinfo a:hover {
+    transform: scale(1.05);
+}
+
+.home {
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    padding: 1em;
+    text-align: center;
+}
+
+.logoutbtn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    margin-right: 2em;
+    cursor: pointer;
+    font: inherit;
+    transition: transform 0.2s;
+}
+
+.logoutbtn:hover {
+    transform: scale(1.05);
 }
 
 .sale-container {

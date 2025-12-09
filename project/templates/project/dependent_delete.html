@@ -6,16 +6,17 @@
 {% load static %}
 
 {% block content %}
-    <h1>Remove {{dependent}}?</h1>
-    <!--form to confirm deletion of dependent-->
-    <form method="POST">
-        {% csrf_token %}
-        <br>
-        <input type="submit" value="Yes" class="btn">
-    </form>
-    <br>
-    <!--provide cancel option-->
-    <a href="{% url 'customer' dependent.guardian.pk %}" class="btn">
-        Go Back
-    </a>
+    <div class="formcenter">
+        <h1>Remove {{dependent}}?</h1>
+        <!--form to confirm deletion of dependent-->
+        <form method="POST">
+            {% csrf_token %}
+            <br>
+            <input type="submit" value="Yes" class="btn">
+            <!--provide cancel option-->
+            <a href="{% url 'customer' dependent.guardian.pk %}" class="btn">
+                Go Back
+            </a>
+        </form>
+    </div>
 {% endblock %}

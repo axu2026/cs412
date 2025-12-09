@@ -6,17 +6,18 @@
 {% load static %}
 
 {% block content %}
-    <h1>Add {{item}}?</h1>
-    <!--form to create a saleitem-->
-    <form method="POST">
-        {% csrf_token %}
-        {{form}}
-        <br>
-        <input type="submit" value="Yes" class="btn">
-    </form>
-    <br>
-    <!--provide a cancel option-->
-    <a href="{% url 'sale' sale.pk %}" class="btn">
-        Go Back
-    </a>
+    <div class="formcenter">
+        <h1>Add {{item}}?</h1>
+        <!--form to create a saleitem-->
+        <form method="POST">
+            {% csrf_token %}
+            {{form}}
+            <br>
+            <input type="submit" value="Yes" class="btn">
+            <!--provide a cancel option-->
+            <a href="{% url 'sale' sale.pk %}" class="btn">
+                Go Back
+            </a>
+        </form>
+    </div>
 {% endblock %}

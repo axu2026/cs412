@@ -6,17 +6,19 @@
 {% load static %}
 
 {% block content %}
-    <h1>Update Information</h1>
-    <!--form to update the customer-->
-    <form method="POST">
-        {% csrf_token %}
-        {{form}}
-        <br>
-        <input type="submit" value="Update" class="btn">
-    </form>
-    <br>
-    <!--provide cancel option-->
-    <a href="{% url 'customer' customer.pk %}" class="btn">
-        Go Back
-    </a>
+    <div class="formcenter">
+        <h1>Update Information</h1>
+        <!--form to update the customer-->
+        <form method="POST">
+            {% csrf_token %}
+            {{form}}
+            <br>
+            <input type="submit" value="Update" class="btn">
+            <!--provide cancel option-->
+            <a href="{% url 'customer' customer.pk %}" class="btn">
+                Go Back
+            </a>
+        </form>
+    </div>
+    
 {% endblock %}

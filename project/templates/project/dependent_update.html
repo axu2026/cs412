@@ -6,16 +6,17 @@
 {% load static %}
 
 {% block content %}
-    <h1>Updating {{dependent}}</h1>
-    <!--form to create a dependent-->
-    <form method="POST">
-        {% csrf_token %}
-        {{form}}
-        <br>
-        <input type="submit" value="Update" class="btn">
-    </form>
-    <br>
-    <a href="{% url 'customer' dependent.guardian.pk %}" class="btn">
-        Go Back
-    </a>
+    <div class="formcenter">
+        <h1>Updating {{dependent}}</h1>
+        <!--form to create a dependent-->
+        <form method="POST">
+            {% csrf_token %}
+            {{form}}
+            <br>
+            <input type="submit" value="Update" class="btn">
+            <a href="{% url 'customer' dependent.guardian.pk %}" class="btn">
+                Go Back
+            </a>
+        </form>
+    </div>
 {% endblock %}

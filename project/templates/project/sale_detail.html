@@ -73,13 +73,23 @@
             <div>
                 <h1>Employee Actions</h1>
                 <h3>Add Payment</h3>
-                <form method="POST">
+                <!--handle payments by form-->
+                <form method="POST" class="sale">
                     {% csrf_token %}
                     {{form}}
                     <br>
                     <input type="submit" class="btn">
                 </form>
                 <h3>Add Items</h3>
+                <!--another form to find items-->
+                <form method="GET" class="sale">
+                    {% csrf_token %}
+                    <label for="query">Query:</label>
+                    <input type="text" name="query">
+                    <br><br>
+                    <input type="submit" class="btn">
+                </form>
+                <br>
                 <table>
                     <!--go through all possible items and display them-->
                     {% for item in items %}

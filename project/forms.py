@@ -12,6 +12,18 @@ class AddPaymentForm(forms.Form):
     amount = forms.DecimalField(min_value=0, decimal_places=2)
 
 
+class GetDatesForm(forms.Form):
+    """a form to get the date ranges and date"""
+    from_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+    to_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+    single_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+
 class CreateCustomerForm(forms.ModelForm):
     """the form to create a new customer account"""
 
@@ -27,6 +39,7 @@ class CreateCustomerForm(forms.ModelForm):
         # use built in widget to change dob input
         widgets = {
             'date_of_birth': forms.SelectDateWidget(
+                attrs={'class': 'formdate'},
                 years=range(1900, datetime.now().year)
             ),
         }
@@ -55,6 +68,7 @@ class CreateDependentForm(forms.ModelForm):
         # use built in widget to change dob input
         widgets = {
             'date_of_birth': forms.SelectDateWidget(
+                attrs={'class': 'formdate'},
                 years=range(datetime.now().year-17, datetime.now().year)
             ),
         }

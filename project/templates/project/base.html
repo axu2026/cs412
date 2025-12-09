@@ -5,7 +5,7 @@
 {% load static %}
 <html>
     <head>
-        <title>Jump World POS</title>
+        <title>Jump World!™ POS</title>
         <link rel="stylesheet" href="{% static 'project.css' %}">
     </head>
     <body>
@@ -15,21 +15,31 @@
                     <a href="{% url 'home' %}">
                         <img src="{% static 'jumpworld.png' %}" alt="logo">
                     </a>
-                    <!--show if there is a user currently authenticated-->
-                    {% if request.user.is_authenticated %}
-                        <span>Welcome {{request.user}}</span>
-                        <!--provide a logout button-->
-                        <form action="{% url 'logout' %}" method="POST" 
-                        style="display: inline-block;">
-                            {% csrf_token %}
-                            <input type="submit", value="Log out">
-                        </form>
-                    {% else %}
-                        <span>Not logged in</span>
-                    {% endif %}
                 </div>
                 <div style="text-align: right;">
-                    
+                    <!--show if there is a user currently authenticated-->
+                    {% if request.user.is_authenticated %}
+                        <div class="headerinfo">
+                            <span style="margin-right: 2em;">Welcome {{request.user}}</span>
+                            <!--provide a logout button-->
+                            <form action="{% url 'logout' %}" method="POST" 
+                            style="display: inline-block;" class="logout">
+                                {% csrf_token %}
+                                <input type="submit", value="Log out" class="logoutbtn">
+                            </form>
+                        </div>
+                    {% else %}
+                        <!--provide login/out options in header if not logged in-->
+                        <div class="headerinfo">
+                            <span style="margin-right: 2em;">Not logged in</span>
+                            <a href="{% url 'create_customer' %}">
+                                Create Account
+                            </a>
+                            <a href="{% url 'login' %}">
+                                Log In
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
             </header>
             <!--main content-->

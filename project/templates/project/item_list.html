@@ -10,6 +10,15 @@
     <a href="{% url 'create_item' %}" class="btn">
         Add Item
     </a>
+    <!--form to find an item-->
+    <form method="GET" class="sale">
+        {% csrf_token %}
+        <label for="query">Query:</label>
+        <input type="text" name="query">
+        <br><br>
+        <input type="submit" class="btn">
+    </form>
+    <hr>
     <table>
         <tr>
             <th>Name</th>

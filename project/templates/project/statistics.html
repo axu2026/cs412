@@ -1,0 +1,23 @@
+<!--project/statistics.html-->
+<!--Aidan Xu (axu26@bu.edu) 12/9/25-->
+<!--template to view statistics on sales-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Sales Statistics</h1>
+    <form method="GET">
+        {{form}}
+        <br>
+        <input type="submit" class="btn">
+    </form>
+    <hr>
+    <div class="fig">
+        {{graph_line|safe}}
+    </div>
+    <br>
+    <div class="fig">
+        {{graph_pie|safe}}
+    </div>
+{% endblock %}

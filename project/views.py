@@ -16,6 +16,10 @@ from .serializers import *
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
 from decimal import Decimal
+import plotly
+import plotly.graph_objs as go
+from django.db.models.functions import TruncDate
+import datetime
 
 # Create your views here.
 class HomeTemplateView(TemplateView):
@@ -404,7 +408,13 @@ class SaleDetailView(LoginRequiredMixin, DetailView):
 
             # get the list of possible items to sell for the employee
             if context['is_employee']:
-                context['items'] = Item.objects.all()
+                items = Item.objects.all()
+
+                # filter if we have a query
+                if 'query' in self.request.GET and self.request.GET['query']:
+                    items = items.filter(name__contains=self.request.GET['query'])
+
+                context['items'] = items
 
         return context
     
@@ -674,6 +684,17 @@ class ItemListView(LoginRequiredMixin, ListView):
         
         return super().dispatch(request, *args, **kwargs)
 
+    def get_queryset(self):
+        """apply query filters to the set"""
+
+        qs = super().get_queryset()
+
+        # check if there is a query
+        if "query" in self.request.GET and self.request.GET['query']:
+            qs = qs.filter(name__contains=self.request.GET['query'])
+
+        return qs
+
     def get_login_url(self):
         """redirect to the log in page"""
         return reverse('login')
@@ -684,3 +705,106 @@ class CustomerCreateAPIView(generics.CreateAPIView):
 
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+
+
+class StatisticsView(ListView):
+    """view for seeing statistics"""
+
+    template_name = "project/statistics.html"
+    context_object_name = "sales"
+
+    def dispatch(self, request, *args, **kwargs):
+        """verify the user has permission to view this"""
+
+        # check if the user is authenticated and is not a staff member
+        if request.user.is_authenticated:
+            if not Employee.objects.filter(user=self.request.user).exists():
+                return render(request, "project/no_permission.html")
+        
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        """return a queryset for sales according to query"""
+
+        qs = Sale.objects.all()
+        from_date = self.request.GET.get('from_date')
+        to_date = self.request.GET.get('to_date')
+
+        # filter the sales by range of date
+        if from_date and to_date:
+            qs = qs.filter(created_at__gte=from_date)
+            qs = qs.filter(created_at__lte=to_date)
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        """return context with graphs"""
+
+        context = super().get_context_data(**kwargs)
+
+        # provide the form with initialized dates if needed
+        if not self.request.GET:
+            from_date = datetime.date.today() - datetime.timedelta(days=30)
+            to_date = datetime.date.today()
+
+            context['form'] = GetDatesForm(initial={
+                'from_date': from_date,
+                'to_date': to_date,
+                'single_date': to_date,
+            })
+        else:
+            context['form'] = GetDatesForm(self.request.GET)
+
+        # for line graph
+        # get all days and their total sale revenue
+        sales = (
+            self.get_queryset()
+            .annotate(day=TruncDate("created_at"))
+            .values("day")
+            .annotate(total=Sum("amount_paid"))
+            .order_by("day")
+        )
+
+        x = [p["day"] for p in sales]
+        y = [p["total"] for p in sales]
+
+        # plot data and return graph
+        fig = go.Scatter(x=x, y=y, mode="lines+markers", name="Revenue per day")
+        title = 'Revenue of sales per day'
+        graph_line = plotly.offline.plot({'data': [fig], 
+                                          "layout_title_text": title},
+                                          auto_open=False,
+                                          output_type='div')
+        context['graph_line'] = graph_line
+
+        # for pie graph
+        date_single = self.request.GET.get("single_date")
+
+        # if there is not a get request, give default
+        if not date_single:
+            date_single = datetime.date.today()
+
+        sales_single = (
+            SaleItem.objects
+            .filter(sale__created_at__date=date_single)
+            .select_related("item")
+        )
+
+        item_totals = {}
+
+        # go through all sales on that day and store values
+        for s in sales_single:
+            name = s.name
+            price = s.price
+            item_totals[name] = item_totals.get(name, 0) + price
+
+        # make the figure and graph
+        fig = go.Pie(labels=list(item_totals.keys()), values=list(item_totals.values()))
+        title = f'Sale distribution on {date_single}'
+        graph_pie = plotly.offline.plot({"data": [fig],
+                                            "layout_title_text": title},
+                                            auto_open=False,
+                                            output_type="div")
+        context['graph_pie'] = graph_pie
+
+        return context

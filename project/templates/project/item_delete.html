@@ -6,15 +6,16 @@
 {% load static %}
 
 {% block content %}
-    <h1>Delete {{item.name}}?</h1>
-    <!--form to delete an item-->
-    <form method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Delete" class="btn">
-    </form>
-    <br>
-    <!--provide a cancel option-->
-    <a href="{% url 'items' %}" class="btn">
-        Go back
-    </a>
+    <div class="formcenter">
+        <h1>Delete {{item.name}}?</h1>
+        <!--form to delete an item-->
+        <form method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Delete" class="btn">
+            <!--provide a cancel option-->
+            <a href="{% url 'items' %}" class="btn">
+                Go back
+            </a>
+        </form>
+    </div>
 {% endblock %}
