@@ -8,3 +8,14 @@ hanx42
 tinaw77
 test
 test2
+
+
+FOR PROJECT
+customer username: mp333
+customer password: 1357rewq
+
+employee username: test123
+employee password: 1357rewq
+
+manager username: axu26
+manager password: 1579
